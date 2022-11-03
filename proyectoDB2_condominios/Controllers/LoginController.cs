@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using proyecto_condominios.DatabaseHelper;
 using System.Data.SqlClient;
 using System.Data;
@@ -16,17 +17,16 @@ namespace proyectoDB2_condominios.Controllers
 
         public ActionResult LoginUser(string email, string password)
         {
-            Modelo_Usuario usuario = spObtener_Usuario(email, password);
+            Usuario? usuario = spObtener_Usuario(email, password);
 
             if (usuario != null)
             {
                 return RedirectToAction("Index", "Home");
-            }
-
-            return View();
-
+            } 
+            return View("Index", "Login");
         }
-        public Modelo_Usuario spObtener_Usuario(string email, string password)
+
+        public Usuario? spObtener_Usuario(string email, string password)
         {
             List<SqlParameter> param = new List<SqlParameter>()
             {
@@ -34,18 +34,27 @@ namespace proyectoDB2_condominios.Controllers
                 new SqlParameter("@password", password)
             };
 
-            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("sp_obtener_usuario", param);
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerUsuario", param);
 
             if (ds.Rows.Count == 1)
             {
-                Modelo_Usuario usuario = new Modelo_Usuario()
+                int? idPers;
+                if (ds.Rows[0]["idPersona"] == DBNull.Value)
+                {
+                    idPers = null;
+                }
+                else
+                {
+                    idPers = Convert.ToInt32(ds.Rows[0]["idPersona"]);
+                }
+
+                Usuario usuario = new Usuario()
                 {
                     idUsuario = Convert.ToInt32(ds.Rows[0]["idUsuario"]),
                     email = ds.Rows[0]["email"].ToString(),
                     password = ds.Rows[0]["password"].ToString(),
                     idRolUsuario = Convert.ToInt32(ds.Rows[0]["idRolUsuario"]),
-                    idPersona = Convert.ToInt32(ds.Rows[0]["idPersona"]),
-
+                    idPersona = idPers,
                 };
 
                 return usuario;
