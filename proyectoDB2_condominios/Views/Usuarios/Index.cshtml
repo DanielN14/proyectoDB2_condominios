@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Usuarios";
+}
+<div class="table-responsive">
+    <table class="table caption-top table-sm">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre Completo</th>
+                <th scope="col">Cédula</th>
+                <th scope="col">Correo Electrónico</th>
+                <th scope="col">Condominio</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in ViewBag.Usuario)
+            {
+                <tr>
+                    <th>@usuario.idUsuario</th>
+                    @{
+                        if (String.IsNullOrEmpty(usuario.nombre) &&
+                    String.IsNullOrEmpty(usuario.primerApellido) &&
+                    String.IsNullOrEmpty(usuario.segundoApellido))
+                        {
+                            <td>-</td>
+                        }
+                        else
+                        {
+                            <td>@String.Concat(usuario.nombre," ", usuario.primerApellido," ",usuario.segundoApellido)</td>
+                        }
+
+                        if (String.IsNullOrEmpty(usuario.cedula))
+                        {
+                            <td>-</td>
+                        }
+                        else
+                        {
+                            <td>@usuario.cedula</td>
+
+                        }
+                    }
+                    <td>@usuario.email</td>
+                    <td>@usuario.nombreCondominio</td>
+                    <td>@usuario.nombreRol</td>
+                    <td class="actions ">
+                        <button class="btn btn-primary btn-sm">
+                            <i class="bi bi-eye-fill"></i>
+                        </button>
+                        <button class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
