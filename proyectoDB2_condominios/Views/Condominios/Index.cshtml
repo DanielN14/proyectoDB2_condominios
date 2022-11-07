@@ -1,68 +1,39 @@
 ﻿@{
     ViewData["Title"] = "Condominios";
 }
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Lato|Liu+Jian+Mao+Cao&display=swap" rel="stylesheet">
-</head>
 <style>
-    .table-fixed tbody {
-        height: 620px;
-        overflow-y: auto;
-        width: 100%;
-    }
 
-    .table-fixed thead,
-    .table-fixed tbody,
-    .table-fixed td,
-    .table-fixed th {
-        display: block;
-    }
-
-        .table-fixed tbody td,
-        .table-fixed thead > tr > th {
-            float: left;
-            border-bottom-width: 0;
-        }
 </style>
+
 <body background="Images\wallpaper_1.jpg" style="background-size: cover;">
 
-    <div class="container d-flex justify-content-center align-items-center" style="margin-top:1%;">
-        <table class="table table-hover table-fixed table-dark bg-dark text-light" style="width:1260px; height:620px">
-            <thead class="bg-dark text-light">
-                <tr style="width:1150px">
-                    <th style="width:240px" scope="col">Logo</th>
-                    <th style="width:240px" scope="col">Codigo</th>
-                    <th style="width:240px" scope="col">Nombre</th>
-                    <th style="width:240px" scope="col">Direccion</th>
-                    <th style="width:240px" scope="col">Telefono </th>
-                    <th style="width:50px" scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                @foreach (var item in ViewBag.Condominios)
-                {
-                    
-                    <tr style="width:1300px; height:60px" >
+    <div class="container d-flex justify-content-center align-items-center" style="margin-top:1%; width:1260px; height:620px">
+        @foreach (var item in ViewBag.Condominios){
+            <div class="card align-items-center" style="width: 13rem; margin-right:10px">
+            <img src="@item.logo" class="card-img-top" style="width:120px; height:120px; margin-top:10px">
+                <div class="card-body align-items-center">
+                    <h4 class="card-title">@item.nombre</h4>
 
-                        
-                        <td style="width:240px; height:60px"><img src="@item.logo" style="width:50px; height:50px"> </td>
-                        <td style="width:240px; height:60px">@item.codigo</td>
-                        <td style="width:240px; height:60px ">@item.nombre</td>
-                        <td style="width:240px; height:60px">@item.direccion</td>
-                        <td style="width:240px; height:60px">@item.telefonoOficina</td>
+                    <p class="card-text"> <img src="/Iconos/ubicacion.png" style="width:20px; height:20px">@item.direccion</p>
 
-                        <td style="width:60px; height:60px"><a href="@Url.Action("Editar", "Condominios", new {idProyectoHabitacional=@item.idProyectoHabitacional})"><img src="Iconos\Info.png" style="width:35px; height:35px" /></a></td>
-
-                    </tr>
-
-
-                }
-            </tbody>
-        </table>
+                    <p class="card-text"> <img src="/Iconos/Telefono.png" style="width:20px; height:20px"> @item.telefonoOficina</p>
+                    <div  style="float:right">
+                        <a href="@Url.Action("Editar", "Condominios", new {idProyectoHabitacional=@item.idProyectoHabitacional})">
+                        <button class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        </a>
+                        <a href="@Url.Action("EliminarCondominio", "Condominios", new {idProyectoHabitacional=@item.idProyectoHabitacional})">
+                        <button class="btn btn-danger btn-sm">
+                          
+                           
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                        </a>
+                    </div>
+            </div>
+        </div>
+        }
     </div>
     <div class="container d-flex justify-content-center align-items-center"><a href="@Url.Action("Agregar", "Condominios")"><img src="Iconos\btnAgregar.png" style="width:50px; height:50px" /></a></div>
 </body>

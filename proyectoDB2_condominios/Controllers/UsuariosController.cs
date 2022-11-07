@@ -232,11 +232,12 @@ namespace proyectoDB2_condominios.Controllers
 
             return RedirectToAction("Index", "Usuarios");
         }
-        public ActionResult EliminarUsuario(string idPersona)
+        public ActionResult EliminarUsuario(int idPersona, int idUsuario )
         {
             List<SqlParameter> param = new List<SqlParameter>()
             {
-                new SqlParameter("@idPersona", idPersona)
+                new SqlParameter("@idPersona", idPersona),
+                 new SqlParameter("@idUsuario", idUsuario)
             };
 
             DatabaseHelper.ExecStoreProcedure("SP_EliminarUsuario", param);
