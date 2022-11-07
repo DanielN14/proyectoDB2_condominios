@@ -66,11 +66,35 @@ namespace proyectoDB2_condominios.Controllers
             return condominioList;
         }
 
-        public ActionResult UpdateCondominio(int idProyectoHabitacional, string nombre, string direccion, string telefonoOficina)
+        public ActionResult UpdateCondominio(IFormFile inputPhoto, int idProyectoHabitacional, string nombre, string direccion, string telefonoOficina)
         {
+            string photoPath;
+
+            if (inputPhoto != null)
+            {
+                photoPath =
+                    "/images/fotos_condominios/"
+                    + Guid.NewGuid().ToString()
+                    + new FileInfo(inputPhoto.FileName).Extension;
+
+                using (
+                    var stream = new FileStream(
+                        Directory.GetCurrentDirectory() + "/wwwroot/" + photoPath,
+                        FileMode.Create
+                    )
+                )
+                {
+                    inputPhoto.CopyTo(stream);
+                }
+            }
+            else
+            {
+                photoPath = "/images/fotos_condominios/defaultCondominio.png";
+            }
             List<SqlParameter> param = new List<SqlParameter>()
             {
                 new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional),
+                new SqlParameter("@logo", photoPath),
                 new SqlParameter("@nombre", nombre),
                 new SqlParameter("@direccion", direccion),
                 new SqlParameter("@telefonoOficina", telefonoOficina)
@@ -96,11 +120,35 @@ namespace proyectoDB2_condominios.Controllers
         {
             return View();
         }
-        public ActionResult AgregarCondominio(string codigo, string nombre, string direccion, string telefonoOficina)
+        public ActionResult AgregarCondominio(IFormFile inputPhoto , string codigo, string nombre, string direccion, string telefonoOficina)
         {
+            string photoPath;
+
+            if (inputPhoto != null)
+            {
+                photoPath =
+                    "/images/fotos_condominios/"
+                    + Guid.NewGuid().ToString()
+                    + new FileInfo(inputPhoto.FileName).Extension;
+
+                using (
+                    var stream = new FileStream(
+                        Directory.GetCurrentDirectory() + "/wwwroot/" + photoPath,
+                        FileMode.Create
+                    )
+                )
+                {
+                    inputPhoto.CopyTo(stream);
+                }
+            }
+            else
+            {
+                photoPath = "/images/fotos_condominios/defaultCondominio.png";
+            }
+
             List<SqlParameter> param = new List<SqlParameter>()
             {
-                new SqlParameter("@logo", "Logos/edificios.png"),
+                new SqlParameter("@logo", photoPath),
                 new SqlParameter("@codigo", codigo),
                 new SqlParameter("@nombre", nombre),
                 new SqlParameter("@direccion", direccion),

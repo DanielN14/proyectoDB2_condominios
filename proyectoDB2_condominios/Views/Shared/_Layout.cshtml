@@ -25,10 +25,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Privacy</a>
-                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">Usuario
@@ -42,9 +38,18 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Condominios"
-                                asp-action="Index">Condominios</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">Condominios
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Condominios" asp-action="Index">Visualizar condominios</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Condominios" asp-action="Agregar">Agregar condominios</a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>

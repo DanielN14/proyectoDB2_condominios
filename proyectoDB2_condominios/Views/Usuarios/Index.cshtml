@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var usuario in ViewBag.Usuario)
+            @foreach (var usuario in ViewBag.Usuarios)
             {
                 <tr>
                     <th>@usuario.idUsuario</th>
@@ -48,12 +48,16 @@
                         <button class="btn btn-primary btn-sm">
                             <i class="bi bi-eye-fill"></i>
                         </button>
+                        <a href="@Url.Action("Editar", "Usuarios", new {idPersona=@usuario.idPersona})">
                         <button class="btn btn-warning btn-sm">
                             <i class="bi bi-pencil"></i>
                         </button>
+                        </a>
+                        <a href="@Url.Action("EliminarUsuario", "Usuarios", new {idPersona=@usuario.idPersona})">
                         <button class="btn btn-danger btn-sm">
                             <i class="bi bi-trash-fill"></i>
                         </button>
+                        </a>
                     </td>
                 </tr>
             }

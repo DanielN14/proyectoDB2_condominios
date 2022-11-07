@@ -34,7 +34,7 @@ namespace proyectoDB2_condominios.Controllers
                 new SqlParameter("@password", password)
             };
 
-            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerUsuario", param);
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerUsuarioLogin", param);
 
             if (ds.Rows.Count == 1)
             {

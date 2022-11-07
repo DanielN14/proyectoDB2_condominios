@@ -10,7 +10,7 @@ namespace proyectoDB2_condominios.Controllers
     {
         public IActionResult Index()
         {
-            ViewBag.Usuario = CargarUsuarios();
+            ViewBag.Usuarios = CargarUsuarios();
             return View();
         }
 
@@ -35,6 +35,7 @@ namespace proyectoDB2_condominios.Controllers
                         email = row["email"].ToString(),
                         nombreRol = row["nombreRol"].ToString(),
                         nombreCondominio = row["nombreCondominio"].ToString(),
+                        idPersona = Convert.ToInt32(row["idPersona"]),
                     }
                     
                 );
@@ -140,6 +141,105 @@ namespace proyectoDB2_condominios.Controllers
                     new SqlParameter("@pIdProyectoHabitacional", selectCondominio),
                 }
             );
+
+            return RedirectToAction("Index", "Usuarios");
+        }
+        public ActionResult Editar(int idPersona)
+        {
+            ViewBag.rolesUsuarios = CargarRolesUsuarios();
+            ViewBag.usuario = CargarUsuario(idPersona);
+            return View();
+        }
+        private List<Usuario> CargarUsuario(int idPersona)
+        {
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                new SqlParameter("@idPersona", idPersona)
+            };
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerUsuario", param);
+            List<Usuario> usuarioList = new List<Usuario>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                usuarioList.Add(new Usuario()
+                {
+                    idPersona = Convert.ToInt32(row["idPersona"]),
+                    nombre = row["nombre"].ToString(),
+                    primerApellido = row["primerApellido"].ToString(),
+                    segundoApellido = row["segundoApellido"].ToString(),
+                    cedula = row["cedula"].ToString(),
+                    foto = row["foto"].ToString(),
+                    email = row["email"].ToString(),
+                    password = row["password"].ToString(),
+                    nombreRol = row["nombreRol"].ToString(),
+                    idRolUsuario = Convert.ToInt32(row["idRolUsuario"]),
+                    idUsuario = Convert.ToInt32(row["idUsuario"]),
+
+                });
+            }
+
+            return usuarioList;
+        }
+        public ActionResult UpdateUsuario(
+            int idPersona,
+            int idUsuario,
+            string txtNombre,
+            string txtPApellido,
+            string txtSApellido,
+            string txtCedula,
+            IFormFile inputPhoto,
+            string txtEmail,
+            string txtPassword,
+            string selectRol)
+        {
+
+            string filePath;
+
+            if (inputPhoto != null)
+            {
+
+                string fileName = inputPhoto + new FileInfo(inputPhoto.FileName).Extension;
+                filePath = Path.Combine("images/fotos_usuarios/", fileName);
+                string localFileName = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/fotos_usuarios"), fileName);
+
+                using (var stream = new FileStream(localFileName, FileMode.Create))
+                {
+                    inputPhoto.CopyTo(stream);
+                };
+
+
+            }
+            else
+            {
+                filePath = Path.Combine("images/fotos_usuarios/", "defaultAvatar.png");
+            }
+
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                    new SqlParameter("@idPersona", idPersona),
+                    new SqlParameter("@idUsuario", idUsuario),
+                    new SqlParameter("@Nombre", txtNombre),
+                    new SqlParameter("@PrimerApellido", txtPApellido),
+                    new SqlParameter("@SegundoApellido", txtSApellido),
+                    new SqlParameter("@Cedula", txtCedula),
+                    new SqlParameter("@Foto", filePath),
+                    new SqlParameter("@Email", txtEmail),
+                    new SqlParameter("@Password", txtPassword),
+                    new SqlParameter("@IdRolUsuario", selectRol),
+            };
+
+            DatabaseHelper.ExecStoreProcedure("SP_UpdateUsuario", param);
+
+            return RedirectToAction("Index", "Usuarios");
+        }
+        public ActionResult EliminarUsuario(string idPersona)
+        {
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                new SqlParameter("@idPersona", idPersona)
+            };
+
+            DatabaseHelper.ExecStoreProcedure("SP_EliminarUsuario", param);
 
             return RedirectToAction("Index", "Usuarios");
         }

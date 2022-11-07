@@ -1,51 +1,71 @@
 ﻿@{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Editar Condominio";
 }
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Lato|Liu+Jian+Mao+Cao&display=swap" rel="stylesheet">
-</head>
 
-
-<div class="container d-flex justify-content-center align-items-center" style="">
-    @foreach (var item in @ViewBag.condominio)
+<div class="container">
+     @foreach (var item in @ViewBag.condominio)
     {
-        <form method="post" action="@Url.Action("UpdateCondominio", "Condominios")" enctype="multipart/form-data">
-            <div class="card" style="width:350px; height:350px">
-                <div class="card-header">
-                    <h5 class="mb-1"><b>Editar Condominio</b></h5>
-                </div>
-                <div class="card-body">
-                    <input hidden="hidden" name="idProyectoHabitacional" value="@item.idProyectoHabitacional">
-                    <div class="form-outline mb-2">
-                        <input type="text" value="@item.nombre" id="nombre" name="nombre" class="form-control" required />
-                        <label class="form-label" for="nombre">Nombre:</label>
-                    </div>
-
-                    <div class="form-outline mb-2">
-                        <input type="text" id="direccion" value="@item.direccion" name="direccion" class="form-control" required />
-                        <label class="form-label" for="direccion">Direccion:</label>
-                    </div>
-                    <div class="form-outline mb-2">
-                        <input type="text" id="telefonoOficina" value="@item.telefonoOficina" name="telefonoOficina" class="form-control" required />
-                        <label class="form-label" for="telefonoOficina">Telefono:</label>
+    <form class="form" asp-controller="Condominios" asp-action="UpdateCondominio" enctype="multipart/form-data">
+        <div style="border: 1px solid #d5d7dd; padding: 30px; border-radius: 15px;">
+          <input hidden="hidden" name="idProyectoHabitacional" value="@item.idProyectoHabitacional">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-12">
+                    <div class="container-profile">
+                        <div class="avatar-upload">
+                            <div class="avatar-edit">
+                                <input type='file' id="inputPhoto" name="inputPhoto" accept=".png, .jpg, .jpeg" />
+                                <label for="inputPhoto"></label>
+                            </div>
+                            <div class="avatar-preview">
+                                <div id="imagePreview"
+                                     style="background-image: url(@item.logo);">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="card-footer bg-gradient">
-                    <button type="button" class="btn btn-danger" onclick="eliminar(@item.idProyectoHabitacional)" style="float:left"><b>Eliminar</b></button>
-                    <button type="submit" class="btn btn-success" style="float:right"><b>Guardar</b></button>
+                <div class="col-lg-9 col-md-8 col-sm-12">
+                    <div class="text-center">
+                        <h4>Editar condominios</h4>
+                        <hr>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label for="nombre" class="form-label">Nombre Condominio:</label>
+                                <input type="text" value="@item.nombre" class="form-control form-control-sm mb-2" name="nombre" required />
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label for="direccion" class="form-label">Dirección:</label>
+                            <input type="text" value="@item.direccion" class="form-control form-control-sm mb-2" name="direccion" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5 col-md-4 col-sm-12">
+                            <label for="telefonoOficina" class="form-label">Telefono:</label>
+                            <input type="text" value="@item.telefonoOficina" class="form-control form-control-sm mb-2" name="telefonoOficina" required />
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group float-end">
+                        <div class="col-12">
+                            <button class="btn btn-white" type="reset">Limpiar</button>
+                            <button class="btn btn-success" type="submit">Guardar</button>
+                        </div>
+                    </div>
                 </div>
-        </form>
-
+            </div>
+        </div>
+    </form>
     }
-
 </div>
-<script>
+
+@*<script>
     function eliminar(idProyectoHabitacional) {
         var api = new XMLHttpRequest();
         api.open("GET", "/Condominios/EliminarCondominio?idProyectoHabitacional=" + idProyectoHabitacional);
         api.send();
 
     }
-</script>
+
+    onclick = "eliminar(@item.idProyectoHabitacional)"
+</script>*@
