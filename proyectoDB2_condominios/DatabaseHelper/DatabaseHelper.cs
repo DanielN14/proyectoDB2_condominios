@@ -10,8 +10,8 @@ namespace proyecto_condominios.DatabaseHelper
         //Daniel-
         //Fran  -
 
-        const string servidor = @"LAPTOP-KK5T2UNQ\SQLEXPRESS";
-        const string baseDatos = "Condominios";
+        const string servidor = @"localhost";
+        const string baseDatos = "CondominiosBD2";
         const string strConexion = "Data Source="+ servidor + ";Initial Catalog=" + baseDatos + ";Integrated Security=True";
 
         public static DataTable ExecuteSelect(string procedure, List<SqlParameter>? param)
