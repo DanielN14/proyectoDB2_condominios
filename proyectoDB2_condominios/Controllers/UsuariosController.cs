@@ -72,7 +72,6 @@ namespace proyectoDB2_condominios.Controllers
 
         private List<Condominio> CargarCondominios()
         {
-
             DataTable ds = DatabaseHelper.ExecuteSelect("SELECT idProyectoHabitacional, nombre FROM proyectosHabitacionales", null);
             List<Condominio> listadoCondominios = new List<Condominio>();
 
@@ -90,15 +89,8 @@ namespace proyectoDB2_condominios.Controllers
             return listadoCondominios;
         }
 
-        public IActionResult AgregarUsuario(
-            string txtNombre,
-            string txtPApellido,
-            string txtSApellido,
-            string txtCedula,
-            IFormFile inputPhoto,
-            string txtEmail,
-            string txtPassword,
-            string selectRol,
+        public IActionResult AgregarUsuario(string txtNombre, string txtPApellido, string txtSApellido, 
+            string txtCedula, IFormFile inputPhoto, string txtEmail, string txtPassword, string selectRol,
             string selectCondominio
         )
         {
@@ -150,6 +142,7 @@ namespace proyectoDB2_condominios.Controllers
             ViewBag.usuario = CargarUsuario(idPersona);
             return View();
         }
+        
         private List<Usuario> CargarUsuario(int idPersona)
         {
             List<SqlParameter> param = new List<SqlParameter>()
@@ -180,38 +173,30 @@ namespace proyectoDB2_condominios.Controllers
 
             return usuarioList;
         }
-        public ActionResult UpdateUsuario(
-            int idPersona,
-            int idUsuario,
-            string txtNombre,
-            string txtPApellido,
-            string txtSApellido,
-            string txtCedula,
-            IFormFile inputPhoto,
-            string txtEmail,
-            string txtPassword,
-            string selectRol)
+        
+        public ActionResult UpdateUsuario(int idPersona, int idUsuario, string txtNombre, 
+            string txtPApellido, string txtSApellido, string txtCedula, IFormFile inputPhoto, 
+            string txtEmail,string txtPassword, string selectRol)
         {
 
-            string filePath;
+            string? photoPath = null;
 
             if (inputPhoto != null)
             {
+                photoPath =
+                    "/images/fotos_usuarios/"
+                    + Guid.NewGuid().ToString()
+                    + new FileInfo(inputPhoto.FileName).Extension;
 
-                string fileName = inputPhoto + new FileInfo(inputPhoto.FileName).Extension;
-                filePath = Path.Combine("images/fotos_usuarios/", fileName);
-                string localFileName = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/fotos_usuarios"), fileName);
-
-                using (var stream = new FileStream(localFileName, FileMode.Create))
+                using (
+                    var stream = new FileStream(
+                        Directory.GetCurrentDirectory() + "/wwwroot/" + photoPath,
+                        FileMode.Create
+                    )
+                )
                 {
                     inputPhoto.CopyTo(stream);
-                };
-
-
-            }
-            else
-            {
-                filePath = Path.Combine("images/fotos_usuarios/", "defaultAvatar.png");
+                }
             }
 
             List<SqlParameter> param = new List<SqlParameter>()
@@ -222,7 +207,7 @@ namespace proyectoDB2_condominios.Controllers
                     new SqlParameter("@PrimerApellido", txtPApellido),
                     new SqlParameter("@SegundoApellido", txtSApellido),
                     new SqlParameter("@Cedula", txtCedula),
-                    new SqlParameter("@Foto", filePath),
+                    new SqlParameter("@Foto", photoPath), 
                     new SqlParameter("@Email", txtEmail),
                     new SqlParameter("@Password", txtPassword),
                     new SqlParameter("@IdRolUsuario", selectRol),
@@ -232,6 +217,7 @@ namespace proyectoDB2_condominios.Controllers
 
             return RedirectToAction("Index", "Usuarios");
         }
+        
         public ActionResult EliminarUsuario(int idPersona, int idUsuario )
         {
             List<SqlParameter> param = new List<SqlParameter>()

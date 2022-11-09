@@ -68,7 +68,8 @@ namespace proyectoDB2_condominios.Controllers
 
         public ActionResult UpdateCondominio(IFormFile inputPhoto, int idProyectoHabitacional, string nombre, string direccion, string telefonoOficina)
         {
-            string photoPath;
+            
+            string? photoPath = null;
 
             if (inputPhoto != null)
             {
@@ -87,10 +88,7 @@ namespace proyectoDB2_condominios.Controllers
                     inputPhoto.CopyTo(stream);
                 }
             }
-            else
-            {
-                photoPath = "/images/fotos_condominios/defaultCondominio.png";
-            }
+            
             List<SqlParameter> param = new List<SqlParameter>()
             {
                 new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional),

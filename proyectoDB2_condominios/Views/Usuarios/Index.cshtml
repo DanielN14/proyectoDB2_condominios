@@ -18,46 +18,51 @@
             @foreach (var usuario in ViewBag.Usuarios)
             {
                 <tr>
-                    <th>@usuario.idUsuario</th>
                     @{
+                        <th>@usuario.idUsuario</th>
                         if (String.IsNullOrEmpty(usuario.nombre) &&
-                    String.IsNullOrEmpty(usuario.primerApellido) &&
-                    String.IsNullOrEmpty(usuario.segundoApellido))
+                            String.IsNullOrEmpty(usuario.primerApellido) &&
+                            String.IsNullOrEmpty(usuario.segundoApellido)
+                        )
                         {
                             <td>-</td>
-                        }
-                        else
-                        {
+                        }else{
                             <td>@String.Concat(usuario.nombre," ", usuario.primerApellido," ",usuario.segundoApellido)</td>
                         }
 
                         if (String.IsNullOrEmpty(usuario.cedula))
                         {
                             <td>-</td>
+                        }else{
+                            <td>@usuario.cedula</td>
+                        }
+
+                        <td>@usuario.email</td>
+
+                        if (String.IsNullOrEmpty(usuario.nombreCondominio))
+                        {
+                            <td>-</td>
                         }
                         else
                         {
-                            <td>@usuario.cedula</td>
-
+                            <td>@usuario.nombreCondominio</td>
                         }
+
+                        <td>@usuario.nombreRol</td>
                     }
-                    <td>@usuario.email</td>
-                    <td>@usuario.nombreCondominio</td>
-                    <td>@usuario.nombreRol</td>
                     <td class="actions ">
                         <button class="btn btn-primary btn-sm">
                             <i class="bi bi-eye-fill"></i>
                         </button>
-                        <a href="@Url.Action("Editar", "Usuarios", new {idPersona=@usuario.idPersona})">
-                        <button class="btn btn-warning btn-sm">
+
+                        <button class="btn btn-warning btn-sm"
+                        onclick="window.location='@Url.Action("Editar", "Usuarios", new {idPersona=@usuario.idPersona})'">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        </a>
-                        <a href="@Url.Action("EliminarUsuario", "Usuarios", new {idPersona=@usuario.idPersona, idUsuario=@usuario.idUsuario})">
-                        <button class="btn btn-danger btn-sm">
+                        <button class="btn btn-danger btn-sm"
+                        onclick="window.location= '@Url.Action("EliminarUsuario", "Usuarios", new {idPersona=@usuario.idPersona, idUsuario=@usuario.idUsuario})'">
                             <i class="bi bi-trash-fill"></i>
                         </button>
-                        </a>
                     </td>
                 </tr>
             }
