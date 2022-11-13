@@ -103,7 +103,7 @@ namespace proyectoDB2_condominios.Controllers
             return RedirectToAction("Index", "Condominios");
         }
 
-        public ActionResult EliminarCondominio(string idProyectoHabitacional)
+        public ActionResult EliminarCondominio(int idProyectoHabitacional)
         {
             List<SqlParameter> param = new List<SqlParameter>()
             {

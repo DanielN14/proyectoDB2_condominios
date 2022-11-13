@@ -27,6 +27,34 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                Visitas
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Visitas" asp-action="Index">Visualizar visitas</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Visitas" asp-action="Index">Registrar visita</a>
+                                </li>
+                                 <li>
+                                    <a class="dropdown-item" asp-controller="Visitas" asp-action="Index">EasyPass</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                Viviendas
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Viviendas" asp-action="Agregar">Agregar Vivienda</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">Usuario
                             </a>
                             <ul class="dropdown-menu">
@@ -48,6 +76,20 @@
                                 </li>
                                 <li>
                                     <a class="dropdown-item" asp-controller="Condominios" asp-action="Agregar">Agregar condominios</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                Vehiculos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Vehiculos" asp-action="Index">Visualizar vehiculos</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Vehiculos" asp-action="Agregar">Agregar vehiculos</a>
                                 </li>
                             </ul>
                         </li>

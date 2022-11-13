@@ -5,7 +5,7 @@
 <div class="container d-flex justify-content-center">
     @foreach (var item in ViewBag.Condominios)
     {
-        <div class="card align-items-center" style="width: 13rem; margin-right:10px">
+            <div class="card align-items-center" style="width: 13rem; margin-right:10px" onclick="window.location= '@Url.Action( "Index", "Viviendas",new {idProyectoHabitacional=@item.idProyectoHabitacional})'">
             <img src="@item.logo" class="card-img-top" style="width:120px; height:120px; margin-top:10px">
             <div class="card-body align-items-center">
                 <h4 class="card-title">@item.nombre</h4>
@@ -31,6 +31,6 @@
 </div>
 <div class="container d-flex justify-content-center align-items-center">
     <a href="@Url.Action("Agregar", "Condominios")">
-        <img src="Iconos\btnAgregar.png" style="width:50px; height:50px" />
+        <img src="Iconos\Agregar.png" style="width:50px; height:50px; margin-top:10px" />
     </a>
 </div>
