@@ -53,7 +53,7 @@ namespace proyectoDB2_condominios.Controllers
 
         private List<RolUsuario> CargarRolesUsuarios()
         {
-            DataTable ds = DatabaseHelper.ExecuteSelect("SELECT * FROM rolesUsuarios", null);
+            DataTable ds = DatabaseHelper.ExecuteSelect("SELECT * FROM rolesUsuarios WHERE nombreRol != 'Administrador'", null);
             List<RolUsuario> listadoRolesUsuario = new List<RolUsuario>();
 
             foreach (DataRow row in ds.Rows)
@@ -143,35 +143,29 @@ namespace proyectoDB2_condominios.Controllers
             return View();
         }
         
-        private List<Usuario> CargarUsuario(int idPersona)
+        private Usuario CargarUsuario(int idPersona)
         {
             List<SqlParameter> param = new List<SqlParameter>()
             {
                 new SqlParameter("@idPersona", idPersona)
             };
             DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerUsuario", param);
-            List<Usuario> usuarioList = new List<Usuario>();
 
-            foreach (DataRow row in ds.Rows)
-            {
-                usuarioList.Add(new Usuario()
-                {
-                    idPersona = Convert.ToInt32(row["idPersona"]),
-                    nombre = row["nombre"].ToString(),
-                    primerApellido = row["primerApellido"].ToString(),
-                    segundoApellido = row["segundoApellido"].ToString(),
-                    cedula = row["cedula"].ToString(),
-                    foto = row["foto"].ToString(),
-                    email = row["email"].ToString(),
-                    password = row["password"].ToString(),
-                    nombreRol = row["nombreRol"].ToString(),
-                    idRolUsuario = Convert.ToInt32(row["idRolUsuario"]),
-                    idUsuario = Convert.ToInt32(row["idUsuario"]),
-
-                });
-            }
-
-            return usuarioList;
+            Usuario usuario = new Usuario(){
+                idPersona = Convert.ToInt32(ds.Rows[0]["idPersona"]),
+                nombre = ds.Rows[0]["nombre"].ToString(),
+                primerApellido = ds.Rows[0]["primerApellido"].ToString(),
+                segundoApellido = ds.Rows[0]["segundoApellido"].ToString(),
+                cedula = ds.Rows[0]["cedula"].ToString(),
+                foto = ds.Rows[0]["foto"].ToString(),
+                email = ds.Rows[0]["email"].ToString(),
+                password = ds.Rows[0]["password"].ToString(),
+                nombreRol = ds.Rows[0]["nombreRol"].ToString(),
+                idRolUsuario = Convert.ToInt32(ds.Rows[0]["idRolUsuario"]),
+                idUsuario = Convert.ToInt32(ds.Rows[0]["idUsuario"]),
+            };
+ 
+            return usuario;
         }
         
         public ActionResult UpdateUsuario(int idPersona, int idUsuario, string txtNombre, 

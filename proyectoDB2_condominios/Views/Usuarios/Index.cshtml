@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Usuarios";
 }
+
 <div class="table-responsive">
     <table class="table caption-top table-sm">
         <thead>
@@ -20,23 +21,8 @@
                 <tr>
                     @{
                         <th>@usuario.idUsuario</th>
-                        if (String.IsNullOrEmpty(usuario.nombre) &&
-                            String.IsNullOrEmpty(usuario.primerApellido) &&
-                            String.IsNullOrEmpty(usuario.segundoApellido)
-                        )
-                        {
-                            <td>-</td>
-                        }else{
-                            <td>@String.Concat(usuario.nombre," ", usuario.primerApellido," ",usuario.segundoApellido)</td>
-                        }
-
-                        if (String.IsNullOrEmpty(usuario.cedula))
-                        {
-                            <td>-</td>
-                        }else{
-                            <td>@usuario.cedula</td>
-                        }
-
+                        <td>@String.Concat(usuario.nombre," ", usuario.primerApellido," ",usuario.segundoApellido)</td>
+                        <td>@usuario.cedula</td>
                         <td>@usuario.email</td>
 
                         if (String.IsNullOrEmpty(usuario.nombreCondominio))
@@ -50,7 +36,7 @@
 
                         <td>@usuario.nombreRol</td>
                     }
-                    <td class="actions ">
+                    <td class="actions">
                         <button class="btn btn-primary btn-sm">
                             <i class="bi bi-eye-fill"></i>
                         </button>
@@ -59,10 +45,37 @@
                         onclick="window.location='@Url.Action("Editar", "Usuarios", new {idPersona=@usuario.idPersona})'">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button class="btn btn-danger btn-sm"
-                        onclick="window.location= '@Url.Action("EliminarUsuario", "Usuarios", new {idPersona=@usuario.idPersona, idUsuario=@usuario.idUsuario})'">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
+                        @{
+                            if (@usuario.nombreRol != "Administrador")
+                            {
+                                <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+
+                                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar Usuario</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ¿Seguro que desea eliminar el usuario?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-danger"
+                                            onclick="window.location= '@Url.Action("EliminarUsuario", "Usuarios", new {idPersona=@usuario.idPersona, idUsuario=@usuario.idUsuario})'">Eliminar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
                     </td>
                 </tr>
             }
