@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.SqlClient;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using proyecto_condominios.DatabaseHelper;
 using proyectoDB2_condominios.Models;
@@ -10,6 +11,7 @@ namespace proyectoDB2_condominios.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.usuario = JsonSerializer.Deserialize<Usuario>(HttpContext.Session.GetString("usuario"));
             ViewBag.Usuarios = CargarUsuarios();
             return View();
         }
@@ -46,6 +48,7 @@ namespace proyectoDB2_condominios.Controllers
 
         public IActionResult Agregar()
         {
+            ViewBag.usuario = JsonSerializer.Deserialize<Usuario>(HttpContext.Session.GetString("usuario"));
             ViewBag.rolesUsuarios = CargarRolesUsuarios();
             ViewBag.condominios = CargarCondominios();
             return View();
@@ -138,6 +141,7 @@ namespace proyectoDB2_condominios.Controllers
         }
         public ActionResult Editar(int idPersona)
         {
+            ViewBag.usuario = JsonSerializer.Deserialize<Usuario>(HttpContext.Session.GetString("usuario"));
             ViewBag.rolesUsuarios = CargarRolesUsuarios();
             ViewBag.usuario = CargarUsuario(idPersona);
             return View();
