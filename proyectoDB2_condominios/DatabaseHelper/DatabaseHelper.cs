@@ -10,7 +10,7 @@ namespace proyecto_condominios.DatabaseHelper
         //Daniel-
         //Fran  -
 
-        const string servidor = @"localhost";
+        const string servidor = @"LAPTOP-KK5T2UNQ\SQLEXPRESS";
         const string baseDatos = "CondominiosBD2";
         const string strConexion = "Data Source="+ servidor + ";Initial Catalog=" + baseDatos + ";Integrated Security=True";
 
