@@ -14,7 +14,7 @@
                             </div>
                             <div class="avatar-preview">
                                 <div id="imagePreview"
-                                     style="background-image: url(/images/fotos_condominios/defaultCondominio.png);">
+                                    style="background-image: url(/images/fotos_condominios/defaultCondominio.png);">
                                 </div>
                             </div>
                         </div>
@@ -27,22 +27,33 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-12 col-sm-12">
-                            <label for="codigo" class="form-label">Codigo:</label>
+                            <label for="codigo" class="form-label">Código</label>
                             <input type="text" class="form-control form-control-sm mb-2" name="codigo" required />
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-12">
-                            <label for="nombre" class="form-label">Nombre Condominio:</label>
+                            <label for="nombre" class="form-label">Nombre Condominio</label>
                             <input type="text" class="form-control form-control-sm mb-2" name="nombre" required />
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-12">
-                            <label for="direccion" class="form-label">Dirección:</label>
+                            <label for="direccion" class="form-label">Dirección</label>
                             <input type="text" class="form-control form-control-sm mb-2" name="direccion" />
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-5 col-md-4 col-sm-12">
-                            <label for="telefonoOficina" class="form-label">Telefono:</label>
-                            <input type="text" class="form-control form-control-sm mb-2" name="telefonoOficina" required />
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label for="telefonoOficina" class="form-label">Telefono</label>
+                            <input type="text" class="form-control form-control-sm mb-2" name="telefonoOficina"
+                                required />
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label for="selectNumViviendas" class="form-label">Viviendas</label>
+                            <select class="form-select form-select-sm mb-2" name="selectNumViviendas" required>
+                                <option selected value="0">0</option>
+                                @for (int i = 5; i <= 20; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
                         </div>
                     </div>
                     <br>

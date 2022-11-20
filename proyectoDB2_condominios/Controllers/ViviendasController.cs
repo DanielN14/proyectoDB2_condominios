@@ -14,7 +14,8 @@ namespace proyectoDB2_condominios.Controllers
             ViewBag.viviendas = CargarViviendas(idProyectoHabitacional);
             return View();
         }
-        private List<Vivienda> CargarViviendas(int idProyectoHabitacional)
+
+        public static List<Vivienda> CargarViviendas(int idProyectoHabitacional)
         {
             List<SqlParameter> param = new List<SqlParameter>()
             {
@@ -30,23 +31,22 @@ namespace proyectoDB2_condominios.Controllers
                     idVivienda = Convert.ToInt32(row["idVivienda"]),
                     numeroVivienda = row["numeroVivienda"].ToString(),
                     descripcion = row["descripcion"].ToString(),
-                    numeroHabitaciones = Convert.ToInt32(row["numeroHabitaciones"]),
-                    cochera = Convert.ToInt32(row["cochera"]),
+                    numeroHabitaciones = Convert.ToInt32(row["numeroHabitaciones"] is DBNull ? 0 : row["numeroHabitaciones"]),
+                    cochera = Convert.ToInt32(row["cochera"] is DBNull ? 0 : row["cochera"]),
                     idProyectoHabitacional = Convert.ToInt32(row["idProyectoHabitacional"]),
-                    idPersona = Convert.ToInt32(row["idPersona"] is DBNull? 0 : row["idPersona"])
+                    idPersona = Convert.ToInt32(row["idPersona"] is DBNull ? 0 : row["idPersona"])
                 });
             }
 
             return viviendasList;
         }
+
         public ActionResult EliminarVivienda(int idVivienda)
         {
-            List<SqlParameter> param = new List<SqlParameter>()
+            DatabaseHelper.ExecStoreProcedure("SP_EliminarVivienda", new List<SqlParameter>()
             {
                 new SqlParameter("@idVivienda", idVivienda)
-            };
-
-            DatabaseHelper.ExecStoreProcedure("SP_EliminarVivienda", param);
+            });
 
             return RedirectToAction("Index", "Viviendas");
         }
@@ -56,7 +56,8 @@ namespace proyectoDB2_condominios.Controllers
             ViewBag.condominios = CargarCondominios();
             return View();
         }
-        public ActionResult AgregarVivienda(string numeroVivienda, string descripcion, int numeroHabitaciones, int cochera , int selectCondominio)
+
+        public ActionResult AgregarVivienda(string numeroVivienda, string descripcion, int numeroHabitaciones, int cochera, int selectCondominio)
         {
 
             List<SqlParameter> param = new List<SqlParameter>()
@@ -73,12 +74,14 @@ namespace proyectoDB2_condominios.Controllers
 
             return RedirectToAction("Index", "Condominios");
         }
+
         public ActionResult Editar(int idVivienda)
         {
             ViewBag.viviendas = CargarVivienda(idVivienda);
-            ViewBag.usuariosDD = SP_ObtenerUsuariosDDL();
+            /* ViewBag.usuariosDD = SP_ObtenerUsuariosDDL(); */
             return View();
         }
+
         private List<Vivienda> CargarVivienda(int idVivienda)
         {
             List<SqlParameter> param = new List<SqlParameter>()
@@ -104,6 +107,7 @@ namespace proyectoDB2_condominios.Controllers
 
             return viviendasList;
         }
+
         public ActionResult UpdateVivienda(int idVivienda, string numeroVivienda, string descripcion, int numeroHabitaciones, int cochera, int SelectUser)
         {
 
@@ -121,6 +125,7 @@ namespace proyectoDB2_condominios.Controllers
 
             return RedirectToAction("Index", "Viviendas");
         }
+
         private List<Usuario> SP_ObtenerUsuariosDDL()
         {
             DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerUsuariosDDL", null);
@@ -137,6 +142,7 @@ namespace proyectoDB2_condominios.Controllers
             }
             return usuariosList;
         }
+
         private List<Condominio> CargarCondominios()
         {
             DataTable ds = DatabaseHelper.ExecuteSelect("SELECT idProyectoHabitacional, nombre FROM proyectosHabitacionales", null);

@@ -4,6 +4,7 @@ using proyectoDB2_condominios.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.Json;
+using proyectoDB2_condominios.Controllers;
 
 namespace proyectoDB2_condominios.Controllers
 {
@@ -36,39 +37,39 @@ namespace proyectoDB2_condominios.Controllers
 
             return condominioList;
         }
+
         public ActionResult Editar(int idProyectoHabitacional)
         {
             ViewBag.condominio = CargarCondominio(idProyectoHabitacional);
+            ViewBag.viviendas = ViviendasController.CargarViviendas(idProyectoHabitacional);
+
             return View();
         }
-        private List<Condominio> CargarCondominio(int idProyectoHabitacional)
+
+        private Condominio CargarCondominio(int idProyectoHabitacional)
         {
             List<SqlParameter> param = new List<SqlParameter>()
             {
                 new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional)
             };
+
             DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerCondominio", param);
-            List<Condominio> condominioList = new List<Condominio>();
 
-            foreach (DataRow row in ds.Rows)
+            Condominio condominio = new Condominio()
             {
-                condominioList.Add(new Condominio()
-                {
-                    idProyectoHabitacional = Convert.ToInt32(row["idProyectoHabitacional"]),
-                    logo = row["logo"].ToString(),
-                    codigo = row["codigo"].ToString(),
-                    nombre = row["nombre"].ToString(),
-                    direccion = row["direccion"].ToString(),
-                    telefonoOficina = row["telefonoOficina"].ToString(),
-                });
-            }
+                idProyectoHabitacional = Convert.ToInt32(ds.Rows[0]["idProyectoHabitacional"]),
+                logo = ds.Rows[0]["logo"].ToString(),
+                codigo = ds.Rows[0]["codigo"].ToString(),
+                nombre = ds.Rows[0]["nombre"].ToString(),
+                direccion = ds.Rows[0]["direccion"].ToString(),
+            };
 
-            return condominioList;
+            return condominio;
         }
 
         public ActionResult UpdateCondominio(IFormFile inputPhoto, int idProyectoHabitacional, string nombre, string direccion, string telefonoOficina)
         {
-            
+
             string? photoPath = null;
 
             if (inputPhoto != null)
@@ -88,7 +89,7 @@ namespace proyectoDB2_condominios.Controllers
                     inputPhoto.CopyTo(stream);
                 }
             }
-            
+
             List<SqlParameter> param = new List<SqlParameter>()
             {
                 new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional),
@@ -114,11 +115,13 @@ namespace proyectoDB2_condominios.Controllers
 
             return RedirectToAction("Index", "Condominios");
         }
+
         public ActionResult Agregar()
         {
             return View();
         }
-        public ActionResult AgregarCondominio(IFormFile inputPhoto , string codigo, string nombre, string direccion, string telefonoOficina)
+
+        public ActionResult AgregarCondominio(IFormFile inputPhoto, string codigo, string nombre, string direccion, string telefonoOficina, string selectNumViviendas)
         {
             string photoPath;
 
@@ -151,6 +154,7 @@ namespace proyectoDB2_condominios.Controllers
                 new SqlParameter("@nombre", nombre),
                 new SqlParameter("@direccion", direccion),
                 new SqlParameter("@telefonoOficina", telefonoOficina),
+                new SqlParameter("@numeroViviendas", selectNumViviendas),
             };
 
             DatabaseHelper.ExecStoreProcedure("SP_AgregarCondominio", param);
