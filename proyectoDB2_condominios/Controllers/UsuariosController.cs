@@ -119,7 +119,7 @@ namespace proyectoDB2_condominios.Controllers
             }
 
             DatabaseHelper.ExecStoreProcedure(
-                "SP_InsertarUsuario",
+                "SP_AgregarUsuario",
                 new List<SqlParameter>()
                 {
                     new SqlParameter("@pNombre", txtNombre),
