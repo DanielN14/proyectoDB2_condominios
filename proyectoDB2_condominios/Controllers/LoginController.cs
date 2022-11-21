@@ -1,9 +1,11 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using proyecto_condominios.DatabaseHelper;
 using System.Data.SqlClient;
 using System.Data;
 using System.Text.Json;
+using System.Collections.Generic;
 using proyectoDB2_condominios.Models;
 
 namespace proyectoDB2_condominios.Controllers
@@ -17,16 +19,27 @@ namespace proyectoDB2_condominios.Controllers
 
         public ActionResult LoginUser(string email, string password)
         {
-            Usuario? usuario = spObtener_Usuario(email, password);
+            Usuario? usuario = Obtener_Usuario(email, password);
 
             if (usuario != null)
             {
+                HttpContext.Session.SetString("usuario", JsonSerializer.Serialize(usuario));
                 return RedirectToAction("Index", "Home");
-            } 
-            return View("Index", "Login");
+            }
+            else
+            {
+                ViewBag.Error = new Models.Error()
+                {
+                    Message = "Incorrect username or password",
+                    BackUrl = "Login",
+                    Text = "Try again?"
+                };
+
+                return View("Error");
+            }
         }
 
-        public Usuario? spObtener_Usuario(string email, string password)
+        public Usuario? Obtener_Usuario(string email, string password)
         {
             List<SqlParameter> param = new List<SqlParameter>()
             {
@@ -59,7 +72,6 @@ namespace proyectoDB2_condominios.Controllers
 
                 return usuario;
             }
-
             return null;
         }
     }

@@ -12,6 +12,7 @@ namespace proyectoDB2_condominios.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.usuario = JsonSerializer.Deserialize<Usuario>(HttpContext.Session.GetString("usuario"));
             ViewBag.Condominios = CargarCondominios();
             return View();
         }
@@ -40,6 +41,7 @@ namespace proyectoDB2_condominios.Controllers
 
         public ActionResult Editar(int idProyectoHabitacional)
         {
+            ViewBag.usuario = JsonSerializer.Deserialize<Usuario>(HttpContext.Session.GetString("usuario"));
             ViewBag.condominio = CargarCondominio(idProyectoHabitacional);
             ViewBag.viviendas = ViviendasController.CargarViviendas(idProyectoHabitacional);
 
@@ -118,6 +120,7 @@ namespace proyectoDB2_condominios.Controllers
 
         public ActionResult Agregar()
         {
+            ViewBag.usuario = JsonSerializer.Deserialize<Usuario>(HttpContext.Session.GetString("usuario"));
             return View();
         }
 

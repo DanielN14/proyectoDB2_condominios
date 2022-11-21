@@ -4,6 +4,7 @@ using proyecto_condominios.DatabaseHelper;
 using proyectoDB2_condominios.Models;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text.Json;
 
 namespace proyectoDB2_condominios.Controllers
 {
@@ -11,6 +12,7 @@ namespace proyectoDB2_condominios.Controllers
     {
         public ActionResult Index(int idProyectoHabitacional)
         {
+            ViewBag.usuario = JsonSerializer.Deserialize<Usuario>(HttpContext.Session.GetString("usuario"));
             ViewBag.viviendas = CargarViviendas(idProyectoHabitacional);
             return View();
         }
@@ -53,6 +55,7 @@ namespace proyectoDB2_condominios.Controllers
 
         public ActionResult Agregar()
         {
+            ViewBag.usuario = JsonSerializer.Deserialize<Usuario>(HttpContext.Session.GetString("usuario"));
             ViewBag.condominios = CargarCondominios();
             return View();
         }
@@ -77,6 +80,7 @@ namespace proyectoDB2_condominios.Controllers
 
         public ActionResult Editar(int idVivienda)
         {
+            ViewBag.usuario = JsonSerializer.Deserialize<Usuario>(HttpContext.Session.GetString("usuario"));
             ViewBag.viviendas = CargarVivienda(idVivienda);
             /* ViewBag.usuariosDD = SP_ObtenerUsuariosDDL(); */
             return View();
