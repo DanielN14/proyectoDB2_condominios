@@ -1,7 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Condominios";
 }
-@Html.Partial("AccesoUsuarios")
+
+@await Html.PartialAsync("AccesoUsuarios")
 
 <div class="container d-flex justify-content-center">
     @foreach (var item in ViewBag.Condominios)
