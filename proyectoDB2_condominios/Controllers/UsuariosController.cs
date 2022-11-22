@@ -227,5 +227,35 @@ namespace proyectoDB2_condominios.Controllers
 
             return RedirectToAction("Index", "Usuarios");
         }
+        //public List<Vivienda> CargarViviendasDD(int idProyectoHabitacional)
+        //{
+        //    List<SqlParameter> param = new List<SqlParameter>()
+        //    {
+        //         new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional)
+        //    };
+
+        //    DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerViviendasDD", param);
+        //    List<Vivienda> viviendasList = new List<Vivienda>();
+
+        //    foreach (DataRow row in ds.Rows)
+        //    {
+        //        viviendasList.Add(new Vivienda()
+        //        {
+        //            idVivienda = Convert.ToInt32(row["idVivienda"]),
+        //            numeroVivienda = row["numeroVivienda"].ToString(),
+
+        //        });
+        //    }
+
+        //    return viviendasList;
+        }
+        //public JsonResult GetViviendas(int pidProyectoHabitacional)
+        //{
+        //    db.Configuration.ProxyCreationEnabled = false;
+        //    List<Vivienda> viviendasList = db.Cantons.Where(x => x.idProyectoHabitacional == pidProyectoHabitacional).ToList();
+        //    //ViewBag.viviendas = viviendasList;
+        //    return Json(viviendasList, JsonRequestBehavior.AllowGet);
+
+        //}
     }
 }
