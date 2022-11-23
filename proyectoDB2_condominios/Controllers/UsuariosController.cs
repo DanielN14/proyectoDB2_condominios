@@ -94,7 +94,7 @@ namespace proyectoDB2_condominios.Controllers
 
         public IActionResult AgregarUsuario(string txtNombre, string txtPApellido, string txtSApellido,
             string txtCedula, IFormFile inputPhoto, string txtEmail, string txtPassword, string selectRol,
-            string selectCondominio
+            string selectCondominio, string selectViviendas
         )
         {
             string photoPath;
@@ -134,6 +134,7 @@ namespace proyectoDB2_condominios.Controllers
                     new SqlParameter("@pPassword", txtPassword),
                     new SqlParameter("@pIdRolUsuario", selectRol),
                     new SqlParameter("@pIdProyectoHabitacional", selectCondominio),
+                    new SqlParameter("@pIdVivienda", selectViviendas)
                 }
             );
 
