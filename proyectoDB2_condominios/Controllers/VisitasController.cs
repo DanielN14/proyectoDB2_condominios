@@ -17,12 +17,14 @@ namespace proyectoDB2_condominios.Controllers
         {
             return View();
         }
+
         public ActionResult EasyPass()
         {
             ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
 
             return View();
         }
+        
         public IActionResult AgregarQR(string idPersona)
         {
 
