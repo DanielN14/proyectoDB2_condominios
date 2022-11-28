@@ -4,115 +4,252 @@
 
 @await Html.PartialAsync("AccesoUsuarios")
 
-<div class="container">
-    <form class="form" asp-controller="Usuarios" asp-action="AgregarUsuario" enctype="multipart/form-data">
-        <div style="border: 1px solid #d5d7dd; padding: 30px; border-radius: 15px;">
-            <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-12">
-                    <div class="container-profile">
-                        <div class="avatar-upload">
-                            <div class="avatar-edit">
-                                <input type='file' id="inputPhoto" name="inputPhoto" accept=".png, .jpg, .jpeg" />
-                                <label for="inputPhoto"></label>
-                            </div>
-                            <div class="avatar-preview">
-                                <div id="imagePreview"
-                                    style="background-image: url(/images/fotos_usuarios/defaultAvatar.png);">
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+            type="button" role="tab" aria-controls="pills-home" aria-selected="true">Usuario</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+            type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Teléfonos</button>
+    </li>
+</ul>
+<form class="form" asp-controller="Usuarios" asp-action="AgregarUsuario" enctype="multipart/form-data">
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+            tabindex="0">
+            <div style="border: 1px solid #d5d7dd; padding: 30px; border-radius: 15px;">
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-12">
+                        <div class="container-profile">
+                            <div class="avatar-upload">
+                                <div class="avatar-edit">
+                                    <input type='file' id="inputPhoto" name="inputPhoto" accept=".png, .jpg, .jpeg" />
+                                    <label for="inputPhoto"></label>
+                                </div>
+                                <div class="avatar-preview">
+                                    <div id="imagePreview"
+                                        style="background-image: url(/images/fotos_usuarios/defaultAvatar.png);">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-9 col-md-8 col-sm-12">
-                    <div class="text-center">
-                        <h4>Creación de usuarios</h4>
-                        <hr>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-12 col-sm-12">
-                            <label for="txtNombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control form-control-sm mb-2" name="txtNombre" required />
+                    <div class="col-lg-9 col-md-8 col-sm-12">
+                        <div class="text-center">
+                            <h4>Creación de usuarios</h4>
+                            <hr>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <label for="txtPApellido" class="form-label">Primer Apellido</label>
-                            <input type="text" class="form-control form-control-sm mb-2" name="txtPApellido" required />
+                        <div class="row">
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <label for="txtNombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control form-control-sm mb-2" name="txtNombre"
+                                    required />
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <label for="txtPApellido" class="form-label">Primer Apellido</label>
+                                <input type="text" class="form-control form-control-sm mb-2" name="txtPApellido"
+                                    required />
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <label for="txtSApellido" class="form-label">Segundo Apellido</label>
+                                <input type="text" class="form-control form-control-sm mb-2" name="txtSApellido" />
+                            </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <label for="txtSApellido" class="form-label">Segundo Apellido</label>
-                            <input type="text" class="form-control form-control-sm mb-2" name="txtSApellido" />
+                        <div class="row">
+                            <div class="col-lg-5 col-md-4 col-sm-12">
+                                <label for="txtCedula" class="form-label">Cédula</label>
+                                <input type="text" class="form-control form-control-sm mb-2" name="txtCedula"
+                                    required />
+                            </div>
+                            <div class="col-lg-7 col-md-8 col-sm-12">
+                                <label for="txtEmail" class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control form-control-sm mb-2" name="txtEmail"
+                                    required />
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-5 col-md-4 col-sm-12">
-                            <label for="txtCedula" class="form-label">Cédula</label>
-                            <input type="text" class="form-control form-control-sm mb-2" name="txtCedula" required />
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <label for="txtPassword" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control form-control-sm mb-2" name="txtPassword"
+                                    required />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <label for="selectRol" class="form-label">Rol del usuario</label>
+                                <select class="form-select form-select-sm mb-2" name="selectRol" id="selectRol"
+                                    required>
+                                    <option selected disabled value="">Seleccione un rol</option>
+                                    @foreach (var roles in ViewBag.rolesUsuarios)
+                                    {
+                                        <option value="@roles.idRolUsuario">@roles.nombreRol</option>
+                                    }
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-lg-7 col-md-8 col-sm-12">
-                            <label for="txtEmail" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control form-control-sm mb-2" name="txtEmail" required />
+                        <div class="row" hidden="hidden" id="opcionesCondomino">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <label for="selectCondominio" class="form-label">Condominio</label>
+                                <select class="form-select form-select-sm mb-2" id="selectCondominio"
+                                    name="selectCondominio" onchange="actualizarViviendas(this.value)">
+                                    <option selected disabled value="">Seleccione un condominio</option>
+                                    @foreach (var condominio in ViewBag.condominios)
+                                    {
+                                        <option value="@condominio.idProyectoHabitacional">@condominio.nombre</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <label for="selectViviendas" class="form-label">Vivienda</label>
+                                <select id="selectViviendas" class="form-select form-select-sm mb-2"
+                                    name="selectViviendas">
+                                    <option selected disabled value="">Seleccione una vivienda</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <label for="txtPassword" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control form-control-sm mb-2" name="txtPassword"
-                                required />
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <label for="selectRol" class="form-label">Rol del usuario</label>
-                            <select class="form-select form-select-sm mb-2" name="selectRol" required>
-                                <option selected disabled value="">Seleccione un rol</option>
-                                @foreach (var roles in ViewBag.rolesUsuarios)
-                                {
-                                    <option value="@roles.idRolUsuario">@roles.nombreRol</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-lg-4 col-md-12 col-sm-12">
-                            <label for="selectCondominio" class="form-label">Condominio</label>
-                            <select class="form-select form-select-sm mb-2" id="selectCondominio"
-                                name="selectCondominio" onchange="actualizarViviendas(this.value)">
-                                <option selected disabled value="">Seleccione un condominio</option>
-                                @foreach (var condominio in ViewBag.condominios)
-                                {
-                                    <option value="@condominio.idProyectoHabitacional">@condominio.nombre</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-lg-4 col-md-12 col-sm-12">
-                            <label for="selectViviendas" class="form-label">Vivienda</label>
-                            <select id="selectViviendas" class="form-select form-select-sm mb-2" name="selectViviendas">
-                                <option selected disabled value="">Seleccione una vivienda</option>
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group float-end">
-                        <div class="col-12">
-                            <button class="btn btn-white" type="reset">Limpiar</button>
-                            <button class="btn btn-success" type="submit">Guardar</button>
+                        <br>
+                        <div class="form-group float-end">
+                            <div class="col-12">
+                                <button class="btn btn-white" type="reset">Limpiar</button>
+                                <button class="btn btn-success" type="submit">Guardar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
-</div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+            ...
+        </div>
+    </div>
+</form>
 
-<script type="text/javascript">
-    const actualizarViviendas = async (id) => {
-        let data = await fetch("/Usuarios/GetViviendas?pidProyectoHabitacional=" + id);
 
-        const result = await data.json();
-
-        selectViviendas = document.getElementById("selectViviendas");
-
-        $("#selectViviendas").empty();
-        $('#selectViviendas').html('<option value="">Seleccione una vivienda</option>');
-
-        result.forEach(vivienda => {
-            $('#selectViviendas').append(`<option value="${vivienda.idVivienda}">${vivienda.descripcion}</option>`);
-        })
+@* <div class="container">
+    <form class="form" asp-controller="Usuarios" asp-action="AgregarUsuario" enctype="multipart/form-data">
+    <div style="border: 1px solid #d5d7dd; padding: 30px; border-radius: 15px;">
+    <div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-12">
+    <div class="container-profile">
+    <div class="avatar-upload">
+    <div class="avatar-edit">
+    <input type='file' id="inputPhoto" name="inputPhoto" accept=".png, .jpg, .jpeg" />
+    <label for="inputPhoto"></label>
+    </div>
+    <div class="avatar-preview">
+    <div id="imagePreview"
+    style="background-image: url(/images/fotos_usuarios/defaultAvatar.png);">
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="col-lg-9 col-md-8 col-sm-12">
+    <div class="text-center">
+    <h4>Creación de usuarios</h4>
+    <hr>
+    </div>
+    <div class="row">
+    <div class="col-lg-4 col-md-12 col-sm-12">
+    <label for="txtNombre" class="form-label">Nombre</label>
+    <input type="text" class="form-control form-control-sm mb-2" name="txtNombre" required />
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12">
+    <label for="txtPApellido" class="form-label">Primer Apellido</label>
+    <input type="text" class="form-control form-control-sm mb-2" name="txtPApellido" required />
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12">
+    <label for="txtSApellido" class="form-label">Segundo Apellido</label>
+    <input type="text" class="form-control form-control-sm mb-2" name="txtSApellido" />
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-lg-5 col-md-4 col-sm-12">
+    <label for="txtCedula" class="form-label">Cédula</label>
+    <input type="text" class="form-control form-control-sm mb-2" name="txtCedula" required />
+    </div>
+    <div class="col-lg-7 col-md-8 col-sm-12">
+    <label for="txtEmail" class="form-label">Correo Electrónico</label>
+    <input type="email" class="form-control form-control-sm mb-2" name="txtEmail" required />
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-12">
+    <label for="txtPassword" class="form-label">Contraseña</label>
+    <input type="password" class="form-control form-control-sm mb-2" name="txtPassword"
+    required />
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12">
+    <label for="selectRol" class="form-label">Rol del usuario</label>
+    <select class="form-select form-select-sm mb-2" name="selectRol" required>
+    <option selected disabled value="">Seleccione un rol</option>
+    @foreach (var roles in ViewBag.rolesUsuarios)
+    {
+    <option value="@roles.idRolUsuario">@roles.nombreRol</option>
     }
-</script>
+    </select>
+    </div>
+    <div class="col-lg-4 col-md-12 col-sm-12">
+    <label for="selectCondominio" class="form-label">Condominio</label>
+    <select class="form-select form-select-sm mb-2" id="selectCondominio"
+    name="selectCondominio" onchange="actualizarViviendas(this.value)">
+    <option selected disabled value="">Seleccione un condominio</option>
+    @foreach (var condominio in ViewBag.condominios)
+    {
+    <option value="@condominio.idProyectoHabitacional">@condominio.nombre</option>
+    }
+    </select>
+    </div>
+    <div class="col-lg-4 col-md-12 col-sm-12">
+    <label for="selectViviendas" class="form-label">Vivienda</label>
+    <select id="selectViviendas" class="form-select form-select-sm mb-2" name="selectViviendas">
+    <option selected disabled value="">Seleccione una vivienda</option>
+    <option value=""></option>
+    </select>
+    </div>
+    </div>
+    <br>
+    <div class="form-group float-end">
+    <div class="col-12">
+    <button class="btn btn-white" type="reset">Limpiar</button>
+    <button class="btn btn-success" type="submit">Guardar</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </form>
+    </div> *@
+
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        const actualizarViviendas = async (id) => {
+            let data = await fetch("/Usuarios/GetViviendas?pidProyectoHabitacional=" + id);
+
+            const result = await data.json();
+
+            $("#selectViviendas").empty();
+            $('#selectViviendas').html('<option value="">Seleccione una vivienda</option>');
+
+            result.forEach(vivienda => {
+                $('#selectViviendas').append(`<option value="${vivienda.idVivienda}">${vivienda.descripcion}</option>`);
+            });
+        }
+
+        $(document).ready(function () {
+            $("#selectRol").change(function () {
+                var seleccion = $(this).children("option:selected").text();
+
+                if (seleccion == "Condómino") {
+                    $('#opcionesCondomino').removeAttr("hidden");
+                } else {
+                    $('#opcionesCondomino').attr("hidden", "hidden");
+                }
+            });
+        });
+    </script>
+}

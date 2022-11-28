@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using proyecto_condominios.DatabaseHelper;
 using proyectoDB2_condominios.Models;
 using Newtonsoft.Json;
+using System.Net;
+using System.Net.Mail;
 
 namespace proyectoDB2_condominios.Controllers
 {
@@ -48,7 +50,7 @@ namespace proyectoDB2_condominios.Controllers
 
         public IActionResult Agregar()
         {
-            ViewBag.usuario =JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
+            ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
             ViewBag.rolesUsuarios = CargarRolesUsuarios();
             ViewBag.condominios = CargarCondominios();
             return View();
@@ -138,11 +140,47 @@ namespace proyectoDB2_condominios.Controllers
                 }
             );
 
+            // ENVIAR EMAIL DE CONFIRMACION
+            /*ktvnsukeryuvfzla*/
+
+            var emailOwner = "testmm311@gmail.com";
+            var emailPassword = "ktvnsukeryuvfzla";
+
+            using (MailMessage mm = new MailMessage(emailOwner, txtEmail))
+            {
+                mm.Subject = "Confirmaci�n de cuenta";
+
+                mm.IsBodyHtml = true;
+
+
+                using (var sr = new StreamReader("wwwroot/html/welcome_mail.txt"))
+                {
+                    // Read the stream as a string, and write the string to the console.
+                    string body = sr.ReadToEnd()
+                        .Replace("@CLIENTNAME", txtNombre)
+                        .Replace("@ClientPassword", txtPassword)
+                        .Replace("@ClientEmail", txtEmail);
+
+                    mm.Body = body;
+                }
+
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.gmail.com";
+                smtp.EnableSsl = true;
+                NetworkCredential NetworkCred = new NetworkCredential(emailOwner, emailPassword);
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = NetworkCred;
+                smtp.Port = 587;
+                smtp.Send(mm);
+            }
+
+            // FIN EMAL CONFIRMATION
+
             return RedirectToAction("Index", "Usuarios");
         }
         public ActionResult Editar(int idPersona)
         {
-            ViewBag.usuario =JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
+            ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
             ViewBag.rolesUsuarios = CargarRolesUsuarios();
             ViewBag.usuario = CargarUsuario(idPersona);
             return View();
