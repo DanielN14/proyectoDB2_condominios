@@ -6,9 +6,11 @@
 
 @if (ViewBag.QRCodeImage != null)
 {
-    <div class="alert alert-info">Tu codigo Qr se genero correctamente</div>
-    <h3>CODE QR numero is @ViewBag.numero</h3>
-    <img src="@ViewBag.QRCodeImage" alt="Booking QR Code" style="height:200px; width:200px">
+    <div style="display: flex; align-content: center;">
+        <div class="alert alert-info">Tu codigo Qr se genero correctamente</div>
+        <h3>CODE QR numero is @ViewBag.numero</h3>
+        <img src="@ViewBag.QRCodeImage" alt="Booking QR Code" style="height:200px; width:200px">
+    </div>
 }
 else
 {

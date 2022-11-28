@@ -11,9 +11,16 @@ namespace proyectoDB2_condominios.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.usuario =JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
-            ViewBag.Vehiculos = CargarVehiculos();
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index","Login");
+            }
+            else
+            {
+                ViewBag.usuario =JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
+                ViewBag.Vehiculos = CargarVehiculos();
+                return View();
+            }
         }
 
         public List<Vehiculo> CargarVehiculos()
@@ -51,8 +58,15 @@ namespace proyectoDB2_condominios.Controllers
 
         public ActionResult Agregar()
         {
-            ViewBag.usuario =JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index","Login");
+            }
+            else
+            {
+                ViewBag.usuario =JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
+                return View();
+            }
         }
 
         public ActionResult AgregarVehiculo(string placa, string marca, string modelo, string color)
@@ -70,12 +84,21 @@ namespace proyectoDB2_condominios.Controllers
 
             return RedirectToAction("Index", "Vehiculos");
         }
+        
         public ActionResult Editar(int idVehiculo)
         {
-            ViewBag.usuario =JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
-            ViewBag.vehiculo = CargarVehiculo(idVehiculo);
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index","Login");
+            }
+            else
+            {    
+                ViewBag.usuario =JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
+                ViewBag.vehiculo = CargarVehiculo(idVehiculo);
+                return View();
+            }
         }
+        
         private List<Vehiculo> CargarVehiculo(int idVehiculo)
         {
             List<SqlParameter> param = new List<SqlParameter>()
@@ -99,6 +122,7 @@ namespace proyectoDB2_condominios.Controllers
 
             return vehiculoList;
         }
+        
         public ActionResult UpdateVehiculo(int idVehiculo, string placa, string marca, string modelo, string color)
         {
             List<SqlParameter> param = new List<SqlParameter>()

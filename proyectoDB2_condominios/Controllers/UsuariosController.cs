@@ -13,9 +13,16 @@ namespace proyectoDB2_condominios.Controllers
     {
         public IActionResult Index()
         {
-            ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-            ViewBag.Usuarios = CargarUsuarios();
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index","Login");
+            }
+            else
+            {
+                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                ViewBag.Usuarios = CargarUsuarios();
+                return View();
+            }
         }
 
         private List<Usuario> CargarUsuarios()
@@ -50,10 +57,17 @@ namespace proyectoDB2_condominios.Controllers
 
         public IActionResult Agregar()
         {
-            ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
-            ViewBag.rolesUsuarios = CargarRolesUsuarios();
-            ViewBag.condominios = CargarCondominios();
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index","Login");
+            }
+            else
+            {
+                ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
+                ViewBag.rolesUsuarios = CargarRolesUsuarios();
+                ViewBag.condominios = CargarCondominios();
+                return View();
+            }
         }
 
         private List<RolUsuario> CargarRolesUsuarios()
@@ -180,10 +194,17 @@ namespace proyectoDB2_condominios.Controllers
         }
         public ActionResult Editar(int idPersona)
         {
-            ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
-            ViewBag.rolesUsuarios = CargarRolesUsuarios();
-            ViewBag.usuario = CargarUsuario(idPersona);
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index","Login");
+            }
+            else
+            {
+                ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
+                ViewBag.rolesUsuarios = CargarRolesUsuarios();
+                ViewBag.usuario = CargarUsuario(idPersona);
+                return View();
+            }
         }
 
         private Usuario CargarUsuario(int idPersona)

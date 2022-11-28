@@ -15,46 +15,65 @@ namespace proyectoDB2_condominios.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index","Login");
+            }
+            else
+            {
+                return View();    
+            }
         }
 
         public ActionResult EasyPass()
         {
-            ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index","Login");
+            }
+            else
+            {
+                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                return View();
+            }
         }
-        
+
         public IActionResult AgregarQR(string idPersona)
         {
-
-            ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-
-            Random r = new Random();
-            int number = r.Next(1000, 10000);
-
-            QRCodeGenerator qRCodeGenerator = new QRCodeGenerator();
-            QRCodeData qRCodeData = qRCodeGenerator.CreateQrCode(number.ToString(), QRCodeGenerator.ECCLevel.Q);
-            QRCode qRCode = new QRCode(qRCodeData);
-
-            using (MemoryStream ms = new MemoryStream())
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
-                using (Bitmap bitmap = qRCode.GetGraphic(20))
-                {
-                    bitmap.Save(ms, ImageFormat.Png);
-                    ViewBag.QRCodeImage = "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
-                    ViewBag.numero = number.ToString();
-                }
+                return RedirectToAction("Index","Login");
             }
-            DatabaseHelper.ExecStoreProcedure("SP_AgregarQR",
-                new List<SqlParameter>()
-                {
-                    new SqlParameter("@idPersona", idPersona),
-                    new SqlParameter("@codigo", number),
-                }
-            );
+            else
+            {
+                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
 
-            return View();
+                Random r = new Random();
+                int number = r.Next(1000, 10000);
+
+                QRCodeGenerator qRCodeGenerator = new QRCodeGenerator();
+                QRCodeData qRCodeData = qRCodeGenerator.CreateQrCode(number.ToString(), QRCodeGenerator.ECCLevel.Q);
+                QRCode qRCode = new QRCode(qRCodeData);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (Bitmap bitmap = qRCode.GetGraphic(20))
+                    {
+                        bitmap.Save(ms, ImageFormat.Png);
+                        ViewBag.QRCodeImage = "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
+                        ViewBag.numero = number.ToString();
+                    }
+                }
+                DatabaseHelper.ExecStoreProcedure("SP_AgregarQR",
+                    new List<SqlParameter>()
+                    {
+                        new SqlParameter("@idPersona", idPersona),
+                        new SqlParameter("@codigo", number),
+                    }
+                );
+
+                return View();
+            }
         }
     }
 }
