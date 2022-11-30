@@ -4,7 +4,6 @@
 @await Html.PartialAsync("AccesoUsuarios")
 
 <form class="form" asp-controller="Visitas" asp-action="AgregarQR" enctype="multipart/form-data">
-    <input type="text" value="@ViewBag.usuario.idPersona" class="form-control form-control-sm mb-2" name="idPersona" hidden="hidden" />
     <button class="btn btn-primary" type="submit">Generar codigo QR</button>
 </form>
 

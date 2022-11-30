@@ -38,7 +38,7 @@ namespace proyectoDB2_condominios.Controllers
             }
         }
 
-        public IActionResult AgregarQR(string idPersona)
+        public IActionResult AgregarQR()
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
@@ -46,8 +46,9 @@ namespace proyectoDB2_condominios.Controllers
             }
             else
             {
-                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-
+                var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                ViewBag.usuario = usuario;
+                
                 Random r = new Random();
                 int number = r.Next(1000, 10000);
 
@@ -67,7 +68,7 @@ namespace proyectoDB2_condominios.Controllers
                 DatabaseHelper.ExecStoreProcedure("SP_AgregarQR",
                     new List<SqlParameter>()
                     {
-                        new SqlParameter("@idPersona", idPersona),
+                        new SqlParameter("@idPersona", usuario!.idPersona),
                         new SqlParameter("@codigo", number),
                     }
                 );
