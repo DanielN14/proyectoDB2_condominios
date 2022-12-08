@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using proyectoDB2_condominios.Models;
+using System.Data;
 
 namespace proyectoDB2_condominios.Controllers
 {
@@ -25,7 +26,7 @@ namespace proyectoDB2_condominios.Controllers
             }
         }
 
-        public ActionResult Agregar()
+        public ActionResult Agregar(int idPersona)
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
@@ -33,6 +34,9 @@ namespace proyectoDB2_condominios.Controllers
             }
             else
             {
+                ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
+                ViewBag.visitantes = CargarVisitantes();
+                ViewBag.tipoVisita = CargarTipoVisitas();
                 return View();
             }
         }
@@ -87,6 +91,50 @@ namespace proyectoDB2_condominios.Controllers
 
                 return View();
             }
+
         }
-    }
+        private List<Visitante> CargarVisitantes()
+        {
+            var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                new SqlParameter("@idPersona", usuario!.idPersona)
+            };
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitantesxPersona", param);
+
+            List<Visitante> ListVisitantes = new List<Visitante>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                ListVisitantes.Add(new Visitante()
+                {
+                    idVisitante = Convert.ToInt32(row["idVisitante"]),
+                    nombre = row["nombre"].ToString(),
+                    primerApellido = row["primerApellido"].ToString(),
+                    segundoApellido = row["segundoApellido"].ToString(),
+                }
+                );
+            }
+
+            return ListVisitantes;
+        }
+        private List<TipoVisita> CargarTipoVisitas()
+        {
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerTiposVisitas", null);
+
+            List<TipoVisita> TipoVisitaList = new List<TipoVisita>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                TipoVisitaList.Add(new TipoVisita()
+                {
+                    idTipoVisita = Convert.ToInt32(row["idTipoVisita"]),
+                    nombreTipo = row["nombreTipo"].ToString(),
+                }
+                );
+            }
+
+            return TipoVisitaList;
+        }
+        }
 }

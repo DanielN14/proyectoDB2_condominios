@@ -19,6 +19,26 @@
                                 required />
                         </div>
                     </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label for="selectVisitante" class="form-label">Visitante:</label>
+                        <select class="form-select form-select-sm mb-2" name="selectVisitante" required>
+                            <option selected disabled value="">Seleccione un visitante</option>
+                            @foreach (var item in ViewBag.visitantes)
+                            {
+                                <option value="@item.idVisitante">@item.nombre @item.primerApellido @item.segundoApellido </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label for="selectTipo" class="form-label">Tipo de Visita:</label>
+                        <select class="form-select form-select-sm mb-2" name="selectTipo" required>
+                            <option selected disabled value="">Seleccione un tipo de visita</option>
+                            @foreach (var item in ViewBag.tipoVisita)
+                            {
+                                <option value="@item.idTipoVisita">@item.nombreTipo </option>
+                            }
+                        </select>
+                    </div>
                     <br>
                     <div class="form-group float-end">
                         <div class="col-12">
@@ -26,6 +46,7 @@
                             <button class="btn btn-success" type="submit">Guardar</button>
                         </div>
                     </div>
+                    <a href="@Url.Action("Agregar","Visitantes",  new {})">¿No has agregado visitantes?</a>
                 </div>
             </div>
         </div>

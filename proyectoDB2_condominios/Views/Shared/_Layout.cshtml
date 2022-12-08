@@ -37,9 +37,6 @@
                                 <li >
                                     <a class="dropdown-item" asp-controller="Visitas" asp-action="Agregar">Registrar visita</a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Visitas" asp-action="Index">Registrar visita</a>
-                                </li>
                                  <li>
                                     <a class="dropdown-item" asp-controller="Visitas" asp-action="EasyPass">EasyPass</a>
                                 </li>
@@ -82,6 +79,17 @@
                                 </li>
                                 <li>
                                     <a class="dropdown-item" asp-controller="Vehiculos" asp-action="Agregar">Agregar vehiculos</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li id="Sesion" hidden="hidden" class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                Sesion
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Login" asp-action="Index">Cerrar sesion</a>
                                 </li>
                             </ul>
                         </li>
