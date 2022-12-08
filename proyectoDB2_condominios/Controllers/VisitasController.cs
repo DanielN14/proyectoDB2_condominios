@@ -17,11 +17,23 @@ namespace proyectoDB2_condominios.Controllers
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
-                return RedirectToAction("Index","Login");
+                return RedirectToAction("Index", "Login");
             }
             else
             {
-                return View();    
+                return View();
+            }
+        }
+
+        public ActionResult Agregar()
+        {
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                return View();
             }
         }
 
@@ -29,7 +41,7 @@ namespace proyectoDB2_condominios.Controllers
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
-                return RedirectToAction("Index","Login");
+                return RedirectToAction("Index", "Login");
             }
             else
             {
@@ -42,13 +54,13 @@ namespace proyectoDB2_condominios.Controllers
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
-                return RedirectToAction("Index","Login");
+                return RedirectToAction("Index", "Login");
             }
             else
             {
                 var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
                 ViewBag.usuario = usuario;
-                
+
                 Random r = new Random();
                 int number = r.Next(1000, 10000);
 
