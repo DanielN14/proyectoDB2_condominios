@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Visitas";
+}
+
+@await Html.PartialAsync("AccesoUsuarios")
+
+<div class="table-responsive">
+    <table class="table caption-top table-sm">
+        <thead>
+            <tr>
+                <th scope="col">ID Visita</th>
+                <th scope="col">Nombre Visitante</th>
+                <th scope="col">Fecha Entrada</th>
+                <th scope="col">Placa</th>
+                <th scope="col">Vivienda</th>
+                <th scope="col">Condominio</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.Visitas_Guarda)
+            {
+                <tr>
+                    @{
+                        <th>@item.idVisita</th>
+                        <td>@String.Concat(item.nombre," ", item.primerApellido," ",item.segundoApellido)</td>
+                        <td>@item.FechaEntrada</td>
+                        <td>@item.Placa</td>
+                        <td>@item.Vivienda</td>
+                        <td>@item.Condominio</td>
+
+                    }
+                    <td class="actions">
+                        <button class="btn btn-primary btn-sm"
+                            onclick="window.location='@Url.Action("MarcarSalida", "Seguridad", new {idVisita=@item.idVisita})'">
+                            Marcar salida
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
