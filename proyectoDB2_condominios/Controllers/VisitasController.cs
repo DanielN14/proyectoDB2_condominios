@@ -41,6 +41,41 @@ namespace proyectoDB2_condominios.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult AgregarVisita(DateTime fechaEntrada, int selectTipo, int? selectVisitanteExistente,
+        string? txtNombre, string? txtPApellido, string? txtSApellido, string? txtCedula, int? switchfavorito)
+        {
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+
+                List<SqlParameter> param = new List<SqlParameter>()
+                {
+                    new SqlParameter("@fechaHoraEntrada", fechaEntrada),
+                    new SqlParameter("@idTipoVisita", selectTipo),
+                    new SqlParameter("@idPersona", usuario!.idPersona),
+                };
+
+                if(selectVisitanteExistente == null){
+                    param.Add(new SqlParameter("@nombreVisitante", txtNombre));
+                    param.Add(new SqlParameter("@primerApellido", txtPApellido));
+                    param.Add(new SqlParameter("@segundoApellido", txtSApellido));
+                    param.Add(new SqlParameter("@cedula", txtCedula));
+                    param.Add(new SqlParameter("@favorito", switchfavorito));
+                }else{
+                    param.Add(new SqlParameter("@idVisitante", selectVisitanteExistente));
+                }
+
+                DatabaseHelper.ExecStoreProcedure("SP_AgregarVisita", param);
+
+                return RedirectToAction("Index", "Visitas");
+            }
+        }
+        
         public ActionResult EasyPass()
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
@@ -93,6 +128,7 @@ namespace proyectoDB2_condominios.Controllers
             }
 
         }
+        
         private List<Visitante> CargarVisitantes()
         {
             var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
@@ -118,6 +154,7 @@ namespace proyectoDB2_condominios.Controllers
 
             return ListVisitantes;
         }
+        
         private List<TipoVisita> CargarTipoVisitas()
         {
             DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerTiposVisitas", null);
