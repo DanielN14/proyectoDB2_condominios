@@ -11,20 +11,42 @@ namespace proyectoDB2_condominios.Controllers
     {
         public IActionResult Index()
         {
-            ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-            ViewBag.Condominios = CargarCondominios();
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                ViewBag.Condominios = CargarCondominios();
+                return View();
+            }
         }
         public IActionResult Visitas_QR()
         {
-            ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                return View();
+            }
         }
+
         public IActionResult Vehiculos_Condominos()
         {
-            ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-            ViewBag.vehiculos = CargarVehiculos_Condominos();
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                ViewBag.vehiculos = CargarVehiculos_Condominos();
+                return View();
+            }
         }
 
         public List<Vehiculo> CargarVehiculos_Condominos()
@@ -46,23 +68,24 @@ namespace proyectoDB2_condominios.Controllers
 
             return VehiculosList;
         }
+
         public ActionResult Validacion(int CodigoQR)
         {
             var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-                DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ValidarQR", new List<SqlParameter>()
-                {
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ValidarQR", new List<SqlParameter>(){
                 new SqlParameter("@CodigoQR", CodigoQR),
-                });
-                List<QR> qrList = new List<QR>();
-                foreach (DataRow row in ds.Rows)
-                {
-                    qrList.Add(new QR()
-                    {
-                        codigo = Convert.ToInt32(row["codigo"]),
-                    });
-                }
+            });
 
-            if (qrList.Count()!=0)
+            List<QR> qrList = new List<QR>();
+            foreach (DataRow row in ds.Rows)
+            {
+                qrList.Add(new QR()
+                {
+                    codigo = Convert.ToInt32(row["codigo"]),
+                });
+            }
+
+            if (qrList.Count() != 0)
             {
                 TempData["Mensaje"] = "Codigo correcto";
                 return RedirectToAction("Visitas_QR", "Seguridad");
@@ -72,12 +95,10 @@ namespace proyectoDB2_condominios.Controllers
                 TempData["Error"] = "Codigo incorrecto";
                 return RedirectToAction("Visitas_QR");
             }
-
         }
+
         public ActionResult MarcarSalida(int idVisita)
         {
-
-            
             List<SqlParameter> param = new List<SqlParameter>()
             {
                 new SqlParameter("@idVisita", idVisita),
@@ -110,38 +131,73 @@ namespace proyectoDB2_condominios.Controllers
         }
         public ActionResult Visitas_Guarda(int idProyectoHabitacional)
         {
-            ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-            ViewBag.Visitas_Guarda = CargarVisitas_Guarda(idProyectoHabitacional);
-            return View();
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                ViewBag.VisitasTradicionales_Guarda = CargarVisitasTradicionales_Guarda(idProyectoHabitacional);
+                ViewBag.VisitasDelivery_Guarda = CargarVisitasDelivery_Guarda(idProyectoHabitacional);
+                return View();
+            }
         }
 
-        public List<Visitas_Guarda> CargarVisitas_Guarda(int idProyectoHabitacional)
+        public List<VisitasTradicionales_Guarda> CargarVisitasTradicionales_Guarda(int idProyectoHabitacional)
         {
             var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
 
-            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitas_Guarda", new List<SqlParameter>()
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitasTradicional_Guarda", new List<SqlParameter>()
             {
                 new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional),
             });
 
-            List<Visitas_Guarda> VisitasList = new List<Visitas_Guarda>();
+            List<VisitasTradicionales_Guarda> listVisitasTradicionales = new List<VisitasTradicionales_Guarda>();
 
             foreach (DataRow row in ds.Rows)
             {
-                VisitasList.Add(new Visitas_Guarda()
+                listVisitasTradicionales.Add(new VisitasTradicionales_Guarda()
                 {
                     idVisita = Convert.ToInt32(row["idVisita"]),
-                    nombre = row["nombre"].ToString(),
-                    primerApellido = row["primerApellido"].ToString(),
-                    segundoApellido = row["segundoApellido"].ToString(),
-                    FechaEntrada = Convert.ToDateTime(row["FechaEntrada"]),
-                    Placa = row["Placa"].ToString(),
-                    Vivienda = row["Vivienda"].ToString(),
-                    Condominio = row["Condominio"].ToString(),
+                    FechaEntrada = Convert.ToDateTime(row["fechaHoraEntrada"]),
+                    numeroVivienda = row["numeroVivienda"].ToString(),
+                    nombreResidente = row["nombreResidente"].ToString(),
+                    nombreVisitante = row["nombreVisitante"].ToString(),
+                    cedulaVisitante = row["cedulaVisitante"].ToString(),
+                    condominio = row["condominio"].ToString(),
                 });
             }
 
-            return VisitasList;
+            return listVisitasTradicionales;
         }
+
+        public List<VisitasDelivery_Guarda> CargarVisitasDelivery_Guarda(int idProyectoHabitacional)
+        {
+            var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitasDelivery_Guarda", new List<SqlParameter>()
+            {
+                new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional),
+            });
+
+            List<VisitasDelivery_Guarda> listVisitasDelivery = new List<VisitasDelivery_Guarda>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                listVisitasDelivery.Add(new VisitasDelivery_Guarda()
+                {
+                    idVisita = Convert.ToInt32(row["idVisita"]),
+                    FechaEntrada = Convert.ToDateTime(row["fechaHoraEntrada"]),
+                    numeroVivienda = row["numeroVivienda"].ToString(),
+                    nombreResidente = row["nombreResidente"].ToString(),
+                    proveedorDelivery = row["proveedorDelivery"].ToString(),
+                    condominio = row["condominio"].ToString(),
+                });
+            }
+
+            return listVisitasDelivery;
+        }
+
     }
 }
