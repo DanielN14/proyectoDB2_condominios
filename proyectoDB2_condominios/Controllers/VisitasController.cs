@@ -22,8 +22,63 @@ namespace proyectoDB2_condominios.Controllers
             }
             else
             {
+                var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                ViewBag.usuario = usuario;
+                ViewBag.visitasTradicionales = obtenerVisitasTradicionales();
+                ViewBag.visitasDelivery = obtenerVisitasDelivery();
                 return View();
             }
+        }
+
+        public List<VisitasDelivery> obtenerVisitasDelivery()
+        {
+            var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitasDelivery", new List<SqlParameter>()
+            {
+                new SqlParameter("@pIdPersona", usuario!.idPersona)
+            });
+
+            List<VisitasDelivery> ListVisitasDelivery = new List<VisitasDelivery>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                ListVisitasDelivery.Add(new VisitasDelivery()
+                {
+                    idVisita = Convert.ToInt32(row["idVisita"]),
+                    FechaEntrada = Convert.ToDateTime(row["fechaHoraEntrada"]),
+                    proveedorDelivery = row["proveedorDelivery"].ToString(),
+                }
+                );
+            }
+
+            return ListVisitasDelivery;
+        }
+
+        public List<VisitasTradicionales> obtenerVisitasTradicionales()
+        {
+            var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitasTradicional", new List<SqlParameter>()
+            {
+                new SqlParameter("@pIdPersona", usuario!.idPersona)
+            });
+
+            List<VisitasTradicionales> ListVisitasTradicionales = new List<VisitasTradicionales>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                ListVisitasTradicionales.Add(new VisitasTradicionales()
+                {
+                    idVisita = Convert.ToInt32(row["idVisita"]),
+                    FechaEntrada = Convert.ToDateTime(row["fechaHoraEntrada"]),
+                    nomCompletoVisitante = row["nombreVisitante"].ToString(),
+                    cedula = row["cedula"].ToString(),
+                }
+                );
+            }
+
+            return ListVisitasTradicionales;
         }
 
         public ActionResult Agregar(int idPersona)
@@ -42,8 +97,9 @@ namespace proyectoDB2_condominios.Controllers
         }
 
         [HttpPost]
-        public ActionResult AgregarVisita(DateTime fechaEntrada, int selectTipo, int? selectVisitanteExistente,
-        string? txtNombre, string? txtPApellido, string? txtSApellido, string? txtCedula, int? switchfavorito)
+        public ActionResult AgregarVisita(DateTime fechaEntrada, int selectTipo,
+        int? selectVisitanteExistente, string? selectDelivery, string? txtNombre,
+        string? txtPApellido, string? txtSApellido, string? txtCedula, int? switchfavorito)
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
@@ -60,22 +116,38 @@ namespace proyectoDB2_condominios.Controllers
                     new SqlParameter("@idPersona", usuario!.idPersona),
                 };
 
-                if(selectVisitanteExistente == null){
-                    param.Add(new SqlParameter("@nombreVisitante", txtNombre));
-                    param.Add(new SqlParameter("@primerApellido", txtPApellido));
-                    param.Add(new SqlParameter("@segundoApellido", txtSApellido));
-                    param.Add(new SqlParameter("@cedula", txtCedula));
-                    param.Add(new SqlParameter("@favorito", switchfavorito));
-                }else{
-                    param.Add(new SqlParameter("@idVisitante", selectVisitanteExistente));
+                // Visita de tipo delivery
+                if (selectTipo == 1)
+                {
+                    param.Add(new SqlParameter("@proveedorDelivery", selectDelivery));
                 }
+
+                // Visita de tipo Tradicional 
+                if (selectTipo == 2)
+                {
+                    // Nuevo visitante
+                    if (selectVisitanteExistente == null)
+                    {
+                        param.Add(new SqlParameter("@nombreVisitante", txtNombre));
+                        param.Add(new SqlParameter("@primerApellido", txtPApellido));
+                        param.Add(new SqlParameter("@segundoApellido", txtSApellido));
+                        param.Add(new SqlParameter("@cedula", txtCedula));
+                        param.Add(new SqlParameter("@favorito", switchfavorito));
+                    }
+                    else
+                    // Visitante existente
+                    {
+                        param.Add(new SqlParameter("@idVisitante", selectVisitanteExistente));
+                    }
+                }
+
 
                 DatabaseHelper.ExecStoreProcedure("SP_AgregarVisita", param);
 
                 return RedirectToAction("Index", "Visitas");
             }
         }
-        
+
         public ActionResult EasyPass()
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
@@ -128,7 +200,7 @@ namespace proyectoDB2_condominios.Controllers
             }
 
         }
-        
+
         private List<Visitante> CargarVisitantes()
         {
             var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
@@ -154,7 +226,7 @@ namespace proyectoDB2_condominios.Controllers
 
             return ListVisitantes;
         }
-        
+
         private List<TipoVisita> CargarTipoVisitas()
         {
             DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerTiposVisitas", null);
@@ -173,5 +245,17 @@ namespace proyectoDB2_condominios.Controllers
 
             return TipoVisitaList;
         }
+   
+        public ActionResult EliminarVisita(int idVisita)
+        {
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                 new SqlParameter("@idVisita", idVisita)
+            };
+
+            DatabaseHelper.ExecStoreProcedure("SP_EliminarVisita", param);
+
+            return RedirectToAction("Index", "Visitas");
         }
+    }
 }

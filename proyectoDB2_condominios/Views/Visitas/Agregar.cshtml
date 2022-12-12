@@ -33,7 +33,8 @@
 
                     <div class="col-lg-12 col-md-12 col-sm-12" id="divSelectVisitante" hidden="hidden">
                         <label for="selectTipoVisitante" class="form-label">Tipo de visitante:</label>
-                        <select class="form-select form-select-sm mb-2" name="selectTipoVisitante" id="selectTipoVisitante">
+                        <select class="form-select form-select-sm mb-2" name="selectTipoVisitante"
+                            id="selectTipoVisitante">
                             <option selected disabled value="">Seleccione un tipo de visitante</option>
                             <option value="Nuevo">Nuevo visitante</option>
                             <option value="Existente">Visitante existente</option>
@@ -42,7 +43,6 @@
                 </div>
 
                 <div class="col-lg-8 col-md-12 col-sm-12">
-                    @* Visitantes *@
                     <div class="row">
                         @* Visitante nuevo*@
                         <div class="col-12 p-3" id="divVisitanteNuevo" hidden="hidden">
@@ -53,13 +53,11 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-12">
                                     <label for="txtPApellido" class="form-label">Primer Apellido</label>
-                                    <input type="text" class="form-control form-control-sm mb-2"
-                                        name="txtPApellido" />
+                                    <input type="text" class="form-control form-control-sm mb-2" name="txtPApellido" />
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-12">
                                     <label for="txtSApellido" class="form-label">Segundo Apellido</label>
-                                    <input type="text" class="form-control form-control-sm mb-2"
-                                        name="txtSApellido" />
+                                    <input type="text" class="form-control form-control-sm mb-2" name="txtSApellido" />
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12">
                                     <label for="txtCedula" class="form-label">Cédula</label>
@@ -76,12 +74,13 @@
                             </div>
                             <br>
                         </div>
-                        
+
                         @* Visitante existente*@
                         <div class="col-12 p-3" id="divVisitanteExistente" hidden="hidden">
                             <div class="row">
                                 <div class="col-lg-7 col-md-12 col-sm-12">
-                                    <label for="selectVisitanteExistente" class="form-label">Visitante existente:</label>
+                                    <label for="selectVisitanteExistente" class="form-label">Visitante
+                                        existente:</label>
                                     <select class="form-select form-select-sm mb-2" name="selectVisitanteExistente"
                                         id="selectVisitanteExistente">
                                         <option selected disabled value="">Seleccione un visitante</option>
@@ -95,22 +94,23 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    @* Delivery *@
-                    <div class="col-lg-8 col-md-12 col-sm-12 p-3" id="divFormDelivery" hidden="hidden">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="row">
-                                    <label for="selectDelivery" class="form-label">Proveedor de delivery</label>
-                                    <select class="form-select form-select-sm mb-2" name="selectDelivery"
-                                        id="selectDelivery">
-                                        <option selected disabled value="">Seleccione un proveedor de delivery</option>
-                                        <option value="UberEats">UberEats</option>
-                                        <option value="Didi">Didi</option>
-                                        <option value="Rappi">Rappi</option>
-                                        <option value="PedidosYa">PedidosYa</option>
-                                    </select>
+                        @* Delivery *@
+                        <div class="col-lg-8 col-md-12 col-sm-12 p-3" id="divFormDelivery" hidden="hidden">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="row">
+                                        <label for="selectDelivery" class="form-label">Proveedor de delivery</label>
+                                        <select class="form-select form-select-sm mb-2" name="selectDelivery"
+                                            id="selectDelivery">
+                                            <option selected disabled value="">Seleccione un proveedor de delivery
+                                            </option>
+                                            <option value="UberEats">UberEats</option>
+                                            <option value="Didi">Didi</option>
+                                            <option value="Rappi">Rappi</option>
+                                            <option value="PedidosYa">PedidosYa</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
