@@ -10,7 +10,7 @@ namespace proyectoDB2_condominios.Controllers
 {
     public class CondominiosController : Controller
     {
-        public ActionResult Index(string busqueda)
+        public ActionResult Index()
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
@@ -19,16 +19,15 @@ namespace proyectoDB2_condominios.Controllers
             else
             {
                 ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-                ViewBag.Condominios = CargarCondominios(busqueda);
+                ViewBag.Condominios = CargarCondominios();
                 return View();
             }
         }
 
-        public List<Condominio> CargarCondominios(string busqueda)
+        public List<Condominio> CargarCondominios()
         {
-
             DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerCondominios", null);
-             List<Condominio> condominioList = new List<Condominio>();
+            List<Condominio> condominioList = new List<Condominio>();
 
             foreach (DataRow row in ds.Rows)
             {

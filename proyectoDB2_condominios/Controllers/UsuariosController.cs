@@ -11,7 +11,7 @@ namespace proyectoDB2_condominios.Controllers
 {
     public class UsuariosController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string busqueda)
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
@@ -20,17 +20,22 @@ namespace proyectoDB2_condominios.Controllers
             else
             {
                 ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-                ViewBag.Usuarios = CargarUsuarios();
+                ViewBag.Usuarios = CargarUsuarios(busqueda);
                 return View();
             }
         }
 
-        private List<Usuario> CargarUsuarios()
+        private List<Usuario> CargarUsuarios(string busqueda)
         {
-            DataTable ds = DatabaseHelper.ExecuteSelect(
-                "SELECT * FROM VW_ObtenerUsuarios;",
-                null
-            );
+            if (busqueda == null)
+            {
+                busqueda = "";
+            }
+            
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerUsuariosAll",new List<SqlParameter>(){
+                new SqlParameter("@busqueda", busqueda),
+            });
+            
             List<Usuario> listadoUsuarios = new List<Usuario>();
 
             foreach (DataRow row in ds.Rows)
@@ -200,7 +205,7 @@ namespace proyectoDB2_condominios.Controllers
             }
             else
             {
-                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
                 ViewBag.rolesUsuarios = CargarRolesUsuarios();
                 ViewBag.usuarioEdit = CargarUsuario(idPersona);
                 return View();
