@@ -4,6 +4,17 @@
 
 @await Html.PartialAsync("AccesoUsuarios")
 
+<div class="row">
+   <form class="form" asp-controller="Seguridad" asp-action="Visitas_Guarda" enctype="multipart/form-data">
+        <div class="col-lg-4 col-md-12 col-sm-12">
+                <input hidden="hidden" type="text" class="form-control form-control-sm mb-2" name="idProyectoHabitacional" value="@ViewData["idProyectoHabitacional"]" />
+                <input type="text" class="form-control form-control-sm mb-2" name="busqueda" value="" />
+                <button class="btn btn-success" type="submit">Buscar</button>
+        </div>
+    </form>
+
+</div>
+
 <div class="table-responsive">
     <table class="table caption-top table-sm">
         <thead>
@@ -22,17 +33,17 @@
             {
                 <tr>
                     @{
-                        <th>@item.idVisita</th>
-                        <td>@String.Concat(item.nombre," ", item.primerApellido," ",item.segundoApellido)</td>
-                        <td>@item.FechaEntrada</td>
-                        <td>@item.Placa</td>
-                        <td>@item.Vivienda</td>
-                        <td>@item.Condominio</td>
+                            <th>@item.idVisita</th>
+                            <td>@String.Concat(item.nombre," ", item.primerApellido," ",item.segundoApellido)</td>
+                            <td>@item.FechaEntrada</td>
+                            <td>@item.Placa</td>
+                            <td>@item.Vivienda</td>
+                            <td>@item.Condominio</td>
 
                     }
                     <td class="actions">
                         <button class="btn btn-primary btn-sm"
-                            onclick="window.location='@Url.Action("MarcarSalida", "Seguridad", new {idVisita=@item.idVisita})'">
+                            onclick="window.location='@Url.Action("MarcarSalida", "Seguridad", new {idVisita=@item.idVisita, idProyectoHabitacional =@ViewData["idProyectoHabitacional"]})'">
                             Marcar salida
                         </button>
                     </td>

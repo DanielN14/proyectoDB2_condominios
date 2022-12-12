@@ -4,6 +4,15 @@
 
 @await Html.PartialAsync("AccesoUsuarios")
 
+<div class="row">
+    <form class="form" asp-controller="Seguridad" asp-action="Vehiculos_Condominos" enctype="multipart/form-data">
+        <div class="col-lg-4 col-md-12 col-sm-12">
+            <input type="text" class="form-control form-control-sm mb-2" name="busqueda" value="" />
+            <button class="btn btn-success" type="submit">Buscar</button>
+        </div>
+    </form>
+
+</div>
 
     <div class="table-responsive">
         <table class="table caption-top table-sm">
