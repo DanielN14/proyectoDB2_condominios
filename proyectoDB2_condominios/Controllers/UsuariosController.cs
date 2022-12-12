@@ -200,7 +200,7 @@ namespace proyectoDB2_condominios.Controllers
             }
             else
             {
-                ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
+                ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
                 ViewBag.rolesUsuarios = CargarRolesUsuarios();
                 ViewBag.usuarioEdit = CargarUsuario(idPersona);
                 return View();

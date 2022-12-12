@@ -4,6 +4,23 @@
 
 @await Html.PartialAsync("AccesoUsuarios")
 
+
+<div class="container" style="height: auto; width: auto; text-align: center; padding-top: 50px; ">
+    <div class="row" style=" height: auto; width: 700px; margin: 0px auto; ">
+        <form class="form" asp-controller="Seguridad" asp-action="Visitas_Guarda" enctype="multipart/form-data">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-5 col-md-5">
+                    <input hidden="hidden" type="text" class="form-control form-control-sm mb-2" name="idProyectoHabitacional" value="@ViewData["idProyectoHabitacional"]" />
+                    <input type="text" class="form-control form-control-sm mb-2" name="busqueda" value="" />
+                </div>
+                <div class="col-xs-2 col-md-2">
+                    <button class="btn btn-success" type="submit">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="row">
     @* Visitas tradicionales *@
     <div class="col-lg-10 col-md-12 col-sm-12" style="margin: 0 auto;">
@@ -162,5 +179,42 @@
     </tr>
     }
     </tbody>
+
+<div class="table-responsive">
+    <table class="table caption-top table-sm">
+        <thead>
+            <tr>
+                <th scope="col">ID Visita</th>
+                <th scope="col">Nombre Visitante</th>
+                <th scope="col">Fecha Entrada</th>
+                <th scope="col">Placa</th>
+                <th scope="col">Vivienda</th>
+                <th scope="col">Condominio</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.Visitas_Guarda)
+            {
+                <tr>
+                    @{
+                            <th>@item.idVisita</th>
+                            <td>@String.Concat(item.nombre," ", item.primerApellido," ",item.segundoApellido)</td>
+                            <td>@item.FechaEntrada</td>
+                            <td>@item.Placa</td>
+                            <td>@item.Vivienda</td>
+                            <td>@item.Condominio</td>
+
+                    }
+                    <td class="actions">
+                        <button class="btn btn-primary btn-sm"
+                            onclick="window.location='@Url.Action("MarcarSalida", "Seguridad", new {idVisita=@item.idVisita, idProyectoHabitacional =@ViewData["idProyectoHabitacional"]})'">
+                            Marcar salida
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
     </table>
     </div> *@

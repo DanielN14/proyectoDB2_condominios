@@ -4,6 +4,7 @@ using proyecto_condominios.DatabaseHelper;
 using proyectoDB2_condominios.Models;
 using System.Data.SqlClient;
 using System.Data;
+using static iTextSharp.text.pdf.AcroFields;
 
 namespace proyectoDB2_condominios.Controllers
 {
@@ -35,7 +36,7 @@ namespace proyectoDB2_condominios.Controllers
             }
         }
 
-        public IActionResult Vehiculos_Condominos()
+        public IActionResult Vehiculos_Condominos(string busqueda)
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
@@ -44,14 +45,23 @@ namespace proyectoDB2_condominios.Controllers
             else
             {
                 ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
-                ViewBag.vehiculos = CargarVehiculos_Condominos();
+                ViewBag.vehiculos = CargarVehiculos_Condominos(busqueda);
                 return View();
             }
         }
 
-        public List<Vehiculo> CargarVehiculos_Condominos()
+        public List<Vehiculo> CargarVehiculos_Condominos(string busqueda)
         {
-            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVehiculosResidentes", null);
+            if (busqueda == null)
+            {
+                busqueda = "";
+            }
+
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVehiculosResidentes", new List<SqlParameter>()
+                {
+                new SqlParameter("@busqueda", busqueda),
+                });
+
             List<Vehiculo> VehiculosList = new List<Vehiculo>();
 
             foreach (DataRow row in ds.Rows)
@@ -96,17 +106,15 @@ namespace proyectoDB2_condominios.Controllers
                 return RedirectToAction("Visitas_QR");
             }
         }
-
-        public ActionResult MarcarSalida(int idVisita)
+        public ActionResult MarcarSalida(int idVisita, int idProyectoHabitacional)
         {
             List<SqlParameter> param = new List<SqlParameter>()
             {
                 new SqlParameter("@idVisita", idVisita),
             };
-
             DatabaseHelper.ExecStoreProcedure("SP_UpdateFechaSalida", param);
 
-            return RedirectToAction("Visitas_Guarda", "Seguridad");
+            return RedirectToAction("Visitas_Guarda", new { idProyectoHabitacional = idProyectoHabitacional });
         }
 
         public List<Condominio> CargarCondominios()
@@ -129,7 +137,8 @@ namespace proyectoDB2_condominios.Controllers
 
             return condominioList;
         }
-        public ActionResult Visitas_Guarda(int idProyectoHabitacional)
+
+        public ActionResult Visitas_Guarda(int idProyectoHabitacional, string busqueda)
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
@@ -148,10 +157,16 @@ namespace proyectoDB2_condominios.Controllers
         {
             var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
 
-            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitasTradicional_Guarda", new List<SqlParameter>()
-            {
-                new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional),
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitasTradicional_Guarda", new List<SqlParameter>(){
+             new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional)
             });
+
+
+            /* DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_BusquedaxPlacasxViviendaxNombre_Guarda", new List<SqlParameter>()
+                {
+                 new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional),
+                new SqlParameter("@busqueda", busqueda),
+                }); */
 
             List<VisitasTradicionales_Guarda> listVisitasTradicionales = new List<VisitasTradicionales_Guarda>();
 
@@ -168,7 +183,7 @@ namespace proyectoDB2_condominios.Controllers
                     condominio = row["condominio"].ToString(),
                 });
             }
-
+            ViewData["idProyectoHabitacional"] = idProyectoHabitacional;
             return listVisitasTradicionales;
         }
 
