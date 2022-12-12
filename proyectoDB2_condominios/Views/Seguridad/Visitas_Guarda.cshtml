@@ -4,10 +4,10 @@
 
 @await Html.PartialAsync("AccesoUsuarios")
 
-
+@* TRADICIONAL *@
 <div class="row mb-4">
     @* Busqueda *@
-    <div class="col-lg-10 col-md-12 col-sm-12" style="margin: 0 auto;">
+    <div class="col-12" style="margin: 0 auto;">
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-12">
                 <h4 style="text-align: center;">Visitas tradicionales
@@ -41,7 +41,7 @@
     </div>
 
     @* Tabla Visitas tradicionales *@
-    <div class="col-lg-10 col-md-12 col-sm-12" style="margin: 0 auto;">
+    <div class="col-12" style="margin: 0 auto;">
         @if (((IEnumerable<dynamic>)ViewBag.VisitasTradicionales_Guarda).Count() > 0)
         {
             <div class="table-responsive">
@@ -50,10 +50,12 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Fecha entrada</th>
-                            <th scope="col">Número de vivienda</th>
+                            <th scope="col">Vivienda</th>
                             <th scope="col">Residente</th>
                             <th scope="col">Visitante</th>
                             <th scope="col">Cédula Visitante</th>
+                            <th scope="col">Placa</th>
+                            <th scope="col">Marca Vehículo</th>
                             <th scope="col">Condominio</th>
                             <th scope="col">Acciones</th>
                         </tr>
@@ -69,6 +71,8 @@
                                     <td>@visitaTradicional.nombreResidente</td>
                                     <td>@visitaTradicional.nombreVisitante</td>
                                     <td>@visitaTradicional.cedulaVisitante</td>
+                                    <td>@visitaTradicional.placaVehiculo</td>
+                                    <td>@visitaTradicional.marcaVehiculo</td>
                                     <td>@visitaTradicional.condominio</td>
                                 }
                                 <td class="actions">
@@ -92,9 +96,10 @@
     </div>
 </div>
 
+@* DELIVERY *@
 <div class="row mt-4">
     @* Busqueda *@
-    <div class="col-lg-10 col-md-12 col-sm-12" style="margin: 0 auto;">
+    <div class="col-12" style="margin: 0 auto;">
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-12">
                 <h4>Visitas de delivery
@@ -130,7 +135,7 @@
     </div>
 
     @* Tabla Visitas de delivery *@
-    <div class="col-lg-10 col-md-12 col-sm-12" style="margin: 0 auto;">
+    <div class="col-12" style="margin: 0 auto;">
         @if (((IEnumerable<dynamic>)ViewBag.VisitasDelivery_Guarda).Count() > 0)
         {
             <div class="table-responsive">
@@ -178,43 +183,3 @@
         }
     </div>
 </div>
-
-
-
-@* <div class="table-responsive">
-    <table class="table caption-top table-sm">
-    <thead>
-    <tr>
-    <th scope="col">ID Visita</th>
-    <th scope="col">Nombre Visitante</th>
-    <th scope="col">Fecha Entrada</th>
-    <th scope="col">Placa</th>
-    <th scope="col">Vivienda</th>
-    <th scope="col">Condominio</th>
-    <th scope="col">Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in ViewBag.Visitas_Guarda)
-    {
-    <tr>
-    @{
-    <th>@item.idVisita</th>
-    <td>@String.Concat(item.nombre," ", item.primerApellido," ",item.segundoApellido)</td>
-    <td>@item.FechaEntrada</td>
-    <td>@item.Placa</td>
-    <td>@item.Vivienda</td>
-    <td>@item.Condominio</td>
-
-    }
-    <td class="actions">
-    <button class="btn btn-primary btn-sm"
-    onclick="window.location='@Url.Action("MarcarSalida", "Seguridad", new {idVisita=@item.idVisita})'">
-    Marcar salida
-    </button>
-    </td>
-    </tr>
-    }
-    </tbody>
-    </table>
-    </div> *@

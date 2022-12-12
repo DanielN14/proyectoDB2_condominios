@@ -33,6 +33,8 @@ namespace proyectoDB2_condominios.Models
         public  string? nombreResidente { get; set; }
         public  string? nombreVisitante { get; set; }
         public  string? cedulaVisitante { get; set; }
+        public  string? placaVehiculo { get; set; }
+        public  string? marcaVehiculo { get; set; }
         public string? condominio { get; set; }
     }
 }

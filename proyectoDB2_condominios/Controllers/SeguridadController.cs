@@ -179,6 +179,8 @@ namespace proyectoDB2_condominios.Controllers
                     nombreResidente = row["nombreResidente"].ToString(),
                     nombreVisitante = row["nombreVisitante"].ToString(),
                     cedulaVisitante = row["cedulaVisitante"].ToString(),
+                    placaVehiculo = row["placa"].ToString(),
+                    marcaVehiculo = row["marca"].ToString(),
                     condominio = row["condominio"].ToString(),
                 });
             }

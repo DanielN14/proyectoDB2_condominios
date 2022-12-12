@@ -99,7 +99,8 @@ namespace proyectoDB2_condominios.Controllers
         [HttpPost]
         public ActionResult AgregarVisita(DateTime fechaEntrada, int selectTipo,
         int? selectVisitanteExistente, string? selectDelivery, string? txtNombre,
-        string? txtPApellido, string? txtSApellido, string? txtCedula, int? switchfavorito)
+        string? txtPApellido, string? txtSApellido, string? txtCedula, int? switchfavorito,
+        string? txtPlaca, string? txtMarca, string? txtModelo, string? txtColor, int? switchEnVehiculo)
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
             {
@@ -133,6 +134,15 @@ namespace proyectoDB2_condominios.Controllers
                         param.Add(new SqlParameter("@segundoApellido", txtSApellido));
                         param.Add(new SqlParameter("@cedula", txtCedula));
                         param.Add(new SqlParameter("@favorito", switchfavorito));
+
+                        // Vehículo
+                        if(switchEnVehiculo == 1){
+                            param.Add(new SqlParameter("@EnVehiculo", switchEnVehiculo));
+                            param.Add(new SqlParameter("@placaVehiculo", txtPlaca));
+                            param.Add(new SqlParameter("@marcaVehiculo", txtMarca));
+                            param.Add(new SqlParameter("@modeloVehiculo", txtModelo));
+                            param.Add(new SqlParameter("@colorVehiculo", txtColor));
+                        }
                     }
                     else
                     // Visitante existente
