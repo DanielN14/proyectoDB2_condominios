@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using proyectoDB2_condominios.Models;
 using System.Data;
+using System.Numerics;
 
 namespace proyectoDB2_condominios.Controllers
 {
@@ -28,6 +29,13 @@ namespace proyectoDB2_condominios.Controllers
                 ViewBag.visitasDelivery = obtenerVisitasDelivery();
                 return View();
             }
+        }
+        public IActionResult Editar_Visitas_Delivery(int idVisita)
+        {
+            var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+            ViewBag.usuario = usuario;
+            ViewBag.visitasDelivery = ObtenerVisitaDelivery(idVisita);
+            return View();
         }
 
         public List<VisitasDelivery> obtenerVisitasDelivery()
@@ -275,7 +283,44 @@ namespace proyectoDB2_condominios.Controllers
 
             return TipoVisitaList;
         }
-   
+
+        public List<VisitasDelivery> ObtenerVisitaDelivery(int idVisita)
+        {
+
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitaDeliveryEditar", new List<SqlParameter>()
+            {
+                new SqlParameter("@idVisita", idVisita)
+            });
+
+            List<VisitasDelivery> ListVisitasDelivery = new List<VisitasDelivery>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                ListVisitasDelivery.Add(new VisitasDelivery()
+                {
+                    idVisita = Convert.ToInt32(row["idVisita"]),
+                    FechaEntrada = Convert.ToDateTime(row["fechaHoraEntrada"]),
+                    proveedorDelivery = row["proveedorDelivery"].ToString(),
+                }
+                );
+            }
+
+            return ListVisitasDelivery;
+        }
+
+        public ActionResult UpdateVisita_Delivery(DateTime fechaEntrada, int idVisita, string selectDelivery)
+        {
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                new SqlParameter("@idVisita", idVisita),
+                new SqlParameter("@fechaEntrada", fechaEntrada),
+                new SqlParameter("@proveedorDelivery", selectDelivery)
+            };
+
+            DatabaseHelper.ExecStoreProcedure("SP_UpdateVisitaDelivery", param);
+
+            return RedirectToAction("Index", "Visitas");
+        }
         public ActionResult EliminarVisita(int idVisita)
         {
             List<SqlParameter> param = new List<SqlParameter>()
