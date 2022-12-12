@@ -38,6 +38,7 @@
                             <option selected disabled value="">Seleccione un tipo de visitante</option>
                             <option value="Nuevo">Nuevo visitante</option>
                             <option value="Existente">Visitante existente</option>
+                            <option value="Favorito">Visitante favoritos</option>
                         </select>
                     </div>
                 </div>
@@ -95,6 +96,28 @@
                             </div>
                         </div>
 
+                        @* Visitante favoritos*@
+                        <div class="col-12 p-3" id="divVisitanteFavoritos" hidden="hidden">
+                            <div class="row">
+                                <div class="col-lg-7 col-md-12 col-sm-12">
+                                    <label for="selectVisitantefavoritos" class="form-label">
+                                        Visitante
+                                        favorito:
+                                    </label>
+                                    <select class="form-select form-select-sm mb-2" name="selectVisitantefavoritos"
+                                            id="selectVisitantefavoritos">
+                                        <option selected disabled value="">Seleccione un visitante</option>
+                                        @foreach (var item in ViewBag.visitantesFav)
+                                        {
+                                            <option value="@item.idVisitante">
+                                                @item.nombre @item.primerApellido
+                                                @item.segundoApellido
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         @* Delivery *@
                         <div class="col-lg-8 col-md-12 col-sm-12 p-3" id="divFormDelivery" hidden="hidden">
                             <div class="row">
@@ -153,6 +176,7 @@
                 // Visitantes
                 $('#divVisitanteNuevo').attr("hidden", "hidden"); // Se oculta divVisitanteNuevo
                 $('#divVisitanteExistente').attr("hidden", "hidden"); // Se oculta divVisitanteExistente
+                $('#divVisitanteFavoritos').attr("hidden", "hidden"); // Se oculta divVisitanteFavoritos
                 $('#divSelectVisitante').attr("hidden", "hidden"); // Se oculta divSelectVisitante
                 $("#selectTipoVisitante").val("");
             }
@@ -165,6 +189,7 @@
             if (seleccion == "Tradicional") {
                 $('#divVisitanteNuevo :input').prop("required", true); // Agregar required de divVisitanteNuevo
                 $('#divVisitanteExistente :input').prop("required", true); // Agregar required de divVisitanteExistente
+                $('#divVisitanteFavoritos :input').prop("required", true); // Agregar required de divVisitanteFavoritos
                 $('#divSelectVisitante :input').prop("required", true); // Agregar required de divSelectVisitante
                 $('#divFormDelivery :input').removeAttr("required"); // Quitar required de divFormDelivery
             }
@@ -172,6 +197,7 @@
             if (seleccion == "Delivery") {
                 $('#divVisitanteNuevo :input').removeAttr("required"); // Quitar required de divVisitanteNuevo
                 $('#divVisitanteExistente :input').removeAttr("required"); // Quitar required de divVisitanteNuevo
+                $('#divVisitanteFavoritos :input').removeAttr("required"); // Quitar required de divVisitanteFavoritos
                 $('#divSelectVisitante :input').removeAttr("required"); // Quitar required de divSelectVisitante
                 $('#divFormDelivery :input').prop("required", true); // Agregar required de divFormDelivery
             }
@@ -184,11 +210,18 @@
             if (seleccion == "Nuevo visitante") {
                 $('#divVisitanteNuevo').removeAttr("hidden");
                 $('#divVisitanteExistente').attr("hidden", "hidden");
+                $('#divVisitanteFavoritos').attr("hidden", "hidden");
             }
 
             if (seleccion == "Visitante existente") {
                 $('#divVisitanteExistente').removeAttr("hidden");
                 $('#divVisitanteNuevo').attr("hidden", "hidden");
+                $('#divVisitanteFavoritos').attr("hidden", "hidden");
+            }
+            if (seleccion == "Visitante favoritos") {
+                $('#divVisitanteFavoritos').removeAttr("hidden");
+                $('#divVisitanteNuevo').attr("hidden", "hidden");
+                $('#divVisitanteExistente').attr("hidden", "hidden");
             }
         });
 
@@ -199,11 +232,18 @@
             if (seleccion == "Nuevo visitante") {
                 $('#divVisitanteNuevo :input').prop("required", true);
                 $('#divVisitanteExistente :input').removeAttr("required");
+                $('#divVisitanteFavoritos :input').removeAttr("required");
             }
 
             if (seleccion == "Visitante existente") {
                 $('#divVisitanteExistente :input').prop("required", true);
                 $('#divVisitanteNuevo :input').removeAttr("required");
+                $('#divVisitanteFavoritos :input').removeAttr("required");
+            }
+            if (seleccion == "Visitante favoritos") {
+                $('#divVisitanteFavoritos :input').prop("required", true);
+                $('#divVisitanteNuevo :input').removeAttr("required");
+                $('#divVisitanteExistente :input').removeAttr("required");
             }
         });
 

@@ -92,13 +92,14 @@ namespace proyectoDB2_condominios.Controllers
                 ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
                 ViewBag.visitantes = CargarVisitantes();
                 ViewBag.tipoVisita = CargarTipoVisitas();
+                ViewBag.visitantesFav = CargarVisitantesFav();
                 return View();
             }
         }
 
         [HttpPost]
         public ActionResult AgregarVisita(DateTime fechaEntrada, int selectTipo,
-        int? selectVisitanteExistente, string? selectDelivery, string? txtNombre,
+        int? selectVisitanteExistente, int? selectVisitantefavoritos, string? selectDelivery, string? txtNombre,
         string? txtPApellido, string? txtSApellido, string? txtCedula, int? switchfavorito)
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
@@ -126,7 +127,7 @@ namespace proyectoDB2_condominios.Controllers
                 if (selectTipo == 2)
                 {
                     // Nuevo visitante
-                    if (selectVisitanteExistente == null)
+                    if (selectVisitanteExistente == null && selectVisitantefavoritos == null)
                     {
                         param.Add(new SqlParameter("@nombreVisitante", txtNombre));
                         param.Add(new SqlParameter("@primerApellido", txtPApellido));
@@ -134,10 +135,15 @@ namespace proyectoDB2_condominios.Controllers
                         param.Add(new SqlParameter("@cedula", txtCedula));
                         param.Add(new SqlParameter("@favorito", switchfavorito));
                     }
-                    else
+                    else if(selectVisitantefavoritos == null)
                     // Visitante existente
                     {
                         param.Add(new SqlParameter("@idVisitante", selectVisitanteExistente));
+                    }
+                    else
+                    // Visitante favoritos
+                    {
+                        param.Add(new SqlParameter("@idVisitante", selectVisitantefavoritos));
                     }
                 }
 
@@ -226,7 +232,31 @@ namespace proyectoDB2_condominios.Controllers
 
             return ListVisitantes;
         }
+        private List<Visitante> CargarVisitantesFav()
+        {
+            var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                new SqlParameter("@idPersona", usuario!.idPersona)
+            };
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitantesFavxPersona", param);
 
+            List<Visitante> ListVisitantes = new List<Visitante>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                ListVisitantes.Add(new Visitante()
+                {
+                    idVisitante = Convert.ToInt32(row["idVisitante"]),
+                    nombre = row["nombre"].ToString(),
+                    primerApellido = row["primerApellido"].ToString(),
+                    segundoApellido = row["segundoApellido"].ToString(),
+                }
+                );
+            }
+
+            return ListVisitantes;
+        }
         private List<TipoVisita> CargarTipoVisitas()
         {
             DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerTiposVisitas", null);
