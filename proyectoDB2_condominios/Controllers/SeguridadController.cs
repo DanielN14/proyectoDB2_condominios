@@ -126,61 +126,35 @@ namespace proyectoDB2_condominios.Controllers
         {
             var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
 
-            if (busqueda ==null)
+            if (busqueda == null)
             {
-                DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_BusquedaxPlacasxViviendaxNombre_Guarda", new List<SqlParameter>()
-                {
-                new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional),
-                new SqlParameter("@busqueda", ""),
-                });
-
-                List<Visitas_Guarda> VisitasList = new List<Visitas_Guarda>();
-
-                foreach (DataRow row in ds.Rows)
-                {
-                    VisitasList.Add(new Visitas_Guarda()
-                    {
-                        idVisita = Convert.ToInt32(row["idVisita"]),
-                        nombre = row["nombre"].ToString(),
-                        primerApellido = row["primerApellido"].ToString(),
-                        segundoApellido = row["segundoApellido"].ToString(),
-                        FechaEntrada = Convert.ToDateTime(row["FechaEntrada"]),
-                        Placa = row["Placa"].ToString(),
-                        Vivienda = row["Vivienda"].ToString(),
-                        Condominio = row["Condominio"].ToString(),
-                    });
-                }
-                ViewData["idProyectoHabitacional"] = idProyectoHabitacional;
-                return VisitasList;
+                busqueda = "";
             }
-            else
-            {
-                DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_BusquedaxPlacasxViviendaxNombre_Guarda", new List<SqlParameter>()
+
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_BusquedaxPlacasxViviendaxNombre_Guarda", new List<SqlParameter>()
                 {
                  new SqlParameter("@idProyectoHabitacional", idProyectoHabitacional),
                 new SqlParameter("@busqueda", busqueda),
                 });
 
-                List<Visitas_Guarda> VisitasList = new List<Visitas_Guarda>();
+            List<Visitas_Guarda> VisitasList = new List<Visitas_Guarda>();
 
-                foreach (DataRow row in ds.Rows)
+            foreach (DataRow row in ds.Rows)
+            {
+                VisitasList.Add(new Visitas_Guarda()
                 {
-                    VisitasList.Add(new Visitas_Guarda()
-                    {
-                        idVisita = Convert.ToInt32(row["idVisita"]),
-                        nombre = row["nombre"].ToString(),
-                        primerApellido = row["primerApellido"].ToString(),
-                        segundoApellido = row["segundoApellido"].ToString(),
-                        FechaEntrada = Convert.ToDateTime(row["FechaEntrada"]),
-                        Placa = row["Placa"].ToString(),
-                        Vivienda = row["Vivienda"].ToString(),
-                        Condominio = row["Condominio"].ToString(),
-                    });
-                }
-                ViewData["idProyectoHabitacional"] = idProyectoHabitacional;
-                return VisitasList;
+                    idVisita = Convert.ToInt32(row["idVisita"]),
+                    nombre = row["nombre"].ToString(),
+                    primerApellido = row["primerApellido"].ToString(),
+                    segundoApellido = row["segundoApellido"].ToString(),
+                    FechaEntrada = Convert.ToDateTime(row["FechaEntrada"]),
+                    Placa = row["Placa"].ToString(),
+                    Vivienda = row["Vivienda"].ToString(),
+                    Condominio = row["Condominio"].ToString(),
+                });
             }
-
+            ViewData["idProyectoHabitacional"] = idProyectoHabitacional;
+            return VisitasList;
         }
     }
-}
+    }
