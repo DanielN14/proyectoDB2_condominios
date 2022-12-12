@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Vehiculos";
+}
+
+@await Html.PartialAsync("AccesoUsuarios")
+
+
+    <div class="table-responsive">
+        <table class="table caption-top table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Placa</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Color</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.vehiculos)
+                {
+                    <tr>
+
+                            <th>@item.idVehiculo</th>
+                                <td>@item.placa</td>
+                                <td>@item.marca</td>
+                                <td>@item.modelo</td>
+                                <td>@item.color</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>

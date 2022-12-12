@@ -20,6 +20,32 @@ namespace proyectoDB2_condominios.Controllers
             ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
             return View();
         }
+        public IActionResult Vehiculos_Condominos()
+        {
+            ViewBag.usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+            ViewBag.vehiculos = CargarVehiculos_Condominos();
+            return View();
+        }
+
+        public List<Vehiculo> CargarVehiculos_Condominos()
+        {
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVehiculosResidentes", null);
+            List<Vehiculo> VehiculosList = new List<Vehiculo>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                VehiculosList.Add(new Vehiculo()
+                {
+                    idVehiculo = Convert.ToInt32(row["idVehiculo"]),
+                    placa = row["placa"].ToString(),
+                    marca = row["marca"].ToString(),
+                    modelo = row["modelo"].ToString(),
+                    color = row["color"].ToString(),
+                });
+            }
+
+            return VehiculosList;
+        }
         public ActionResult Validacion(int CodigoQR)
         {
             var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
