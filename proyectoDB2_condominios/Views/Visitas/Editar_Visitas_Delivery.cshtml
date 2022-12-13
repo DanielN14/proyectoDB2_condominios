@@ -37,7 +37,8 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group float-end">
-                                        <button class="btn btn-white" type="reset">Cancelar</button>
+                                        <button class="btn btn-secondary" type="button"
+                                onclick="window.location='@Url.Action("Index", "Visitas")'">Cancelar</button>
                                         <button class="btn btn-success" value="@item.idVisita" name="idVisita"
                                         type="submit">Guardar</button>
                                     </div>
