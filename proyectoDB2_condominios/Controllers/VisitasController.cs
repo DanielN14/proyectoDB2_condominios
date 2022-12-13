@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using proyectoDB2_condominios.Models;
 using System.Data;
+using System.Numerics;
 
 namespace proyectoDB2_condominios.Controllers
 {
@@ -30,6 +31,109 @@ namespace proyectoDB2_condominios.Controllers
             }
         }
 
+        public IActionResult Editar_Visitas_Delivery(int idVisita)
+        {
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                ViewBag.usuario = usuario;
+                ViewBag.visitasDelivery = ObtenerVisitaDelivery(idVisita);
+                return View();
+            }
+        }
+
+        public List<VisitasDelivery> ObtenerVisitaDelivery(int idVisita)
+        {
+
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitaDeliveryEditar", new List<SqlParameter>()
+            {
+                new SqlParameter("@idVisita", idVisita)
+            });
+
+            List<VisitasDelivery> ListVisitasDelivery = new List<VisitasDelivery>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                ListVisitasDelivery.Add(new VisitasDelivery()
+                {
+                    idVisita = Convert.ToInt32(row["idVisita"]),
+                    FechaEntrada = Convert.ToDateTime(row["fechaHoraEntrada"]),
+                    proveedorDelivery = row["proveedorDelivery"].ToString(),
+                }
+                );
+            }
+
+            return ListVisitasDelivery;
+        }
+
+        public ActionResult UpdateVisita_Delivery(DateTime fechaEntrada, int idVisita, string selectDelivery)
+        {
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                new SqlParameter("@idVisita", idVisita),
+                new SqlParameter("@fechaEntrada", fechaEntrada),
+                new SqlParameter("@proveedorDelivery", selectDelivery)
+            };
+
+            DatabaseHelper.ExecStoreProcedure("SP_UpdateVisitaDelivery", param);
+
+            return RedirectToAction("Index", "Visitas");
+        }
+
+        public IActionResult Editar_Visitas_Tradicional(int idVisita)
+        {
+            if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+                ViewBag.usuario = usuario;
+                ViewBag.visitasTradicional = ObtenerVisitaTradional(idVisita);
+                return View();
+            }
+
+        }
+
+        public List<VisitasTradicionales> ObtenerVisitaTradional(int idVisita)
+        {
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitaTradicionalEditar", new List<SqlParameter>()
+            {
+                new SqlParameter("@idVisita", idVisita)
+            });
+
+            List<VisitasTradicionales> ListVisitasTradicionales = new List<VisitasTradicionales>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                ListVisitasTradicionales.Add(new VisitasTradicionales()
+                {
+                    idVisita = Convert.ToInt32(row["idVisita"]),
+                    FechaEntrada = Convert.ToDateTime(row["fechaHoraEntrada"]),
+                });
+            }
+
+            return ListVisitasTradicionales;
+        }
+
+        public ActionResult UpdateVisita_Tradicional(int idVisita, DateTime fechaEntrada)
+        {
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                new SqlParameter("@idVisita", idVisita),
+                new SqlParameter("@fechaEntrada", fechaEntrada),
+            };
+
+            DatabaseHelper.ExecStoreProcedure("SP_UpdateVisitaTradicional", param);
+
+            return RedirectToAction("Index", "Visitas");
+        }
+        
         public List<VisitasDelivery> obtenerVisitasDelivery()
         {
             var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
@@ -92,14 +196,15 @@ namespace proyectoDB2_condominios.Controllers
                 ViewBag.usuario = JsonConvert.DeserializeObject(HttpContext.Session.GetString("usuario"));
                 ViewBag.visitantes = CargarVisitantes();
                 ViewBag.tipoVisita = CargarTipoVisitas();
+                ViewBag.visitantesFav = CargarVisitantesFav();
                 return View();
             }
         }
 
         [HttpPost]
         public ActionResult AgregarVisita(DateTime fechaEntrada, int selectTipo,
-        int? selectVisitanteExistente, string? selectDelivery, string? txtNombre,
-        string? txtPApellido, string? txtSApellido, string? txtCedula, int? switchfavorito,
+        int? selectVisitanteExistente, int? selectVisitantefavoritos, string? selectDelivery,
+        string? txtNombre, string? txtPApellido, string? txtSApellido, string? txtCedula, int? switchfavorito,
         string? txtPlaca, string? txtMarca, string? txtModelo, string? txtColor, int? switchEnVehiculo)
         {
             if (String.IsNullOrEmpty(HttpContext.Session.GetString("usuario")))
@@ -127,7 +232,7 @@ namespace proyectoDB2_condominios.Controllers
                 if (selectTipo == 2)
                 {
                     // Nuevo visitante
-                    if (selectVisitanteExistente == null)
+                    if (selectVisitanteExistente == null && selectVisitantefavoritos == null)
                     {
                         param.Add(new SqlParameter("@nombreVisitante", txtNombre));
                         param.Add(new SqlParameter("@primerApellido", txtPApellido));
@@ -136,7 +241,8 @@ namespace proyectoDB2_condominios.Controllers
                         param.Add(new SqlParameter("@favorito", switchfavorito));
 
                         // Vehículo
-                        if(switchEnVehiculo == 1){
+                        if (switchEnVehiculo == 1)
+                        {
                             param.Add(new SqlParameter("@EnVehiculo", switchEnVehiculo));
                             param.Add(new SqlParameter("@placaVehiculo", txtPlaca));
                             param.Add(new SqlParameter("@marcaVehiculo", txtMarca));
@@ -144,10 +250,15 @@ namespace proyectoDB2_condominios.Controllers
                             param.Add(new SqlParameter("@colorVehiculo", txtColor));
                         }
                     }
-                    else
+                    else if (selectVisitantefavoritos == null)
                     // Visitante existente
                     {
                         param.Add(new SqlParameter("@idVisitante", selectVisitanteExistente));
+                    }
+                    else
+                    // Visitante favoritos
+                    {
+                        param.Add(new SqlParameter("@idVisitante", selectVisitantefavoritos));
                     }
                 }
 
@@ -237,6 +348,32 @@ namespace proyectoDB2_condominios.Controllers
             return ListVisitantes;
         }
 
+        private List<Visitante> CargarVisitantesFav()
+        {
+            var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("usuario"));
+            List<SqlParameter> param = new List<SqlParameter>()
+            {
+                new SqlParameter("@idPersona", usuario!.idPersona)
+            };
+            DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerVisitantesFavxPersona", param);
+
+            List<Visitante> ListVisitantes = new List<Visitante>();
+
+            foreach (DataRow row in ds.Rows)
+            {
+                ListVisitantes.Add(new Visitante()
+                {
+                    idVisitante = Convert.ToInt32(row["idVisitante"]),
+                    nombre = row["nombre"].ToString(),
+                    primerApellido = row["primerApellido"].ToString(),
+                    segundoApellido = row["segundoApellido"].ToString(),
+                }
+                );
+            }
+
+            return ListVisitantes;
+        }
+
         private List<TipoVisita> CargarTipoVisitas()
         {
             DataTable ds = DatabaseHelper.ExecuteStoreProcedure("SP_ObtenerTiposVisitas", null);
@@ -255,7 +392,7 @@ namespace proyectoDB2_condominios.Controllers
 
             return TipoVisitaList;
         }
-   
+
         public ActionResult EliminarVisita(int idVisita)
         {
             List<SqlParameter> param = new List<SqlParameter>()

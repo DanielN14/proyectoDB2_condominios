@@ -32,8 +32,8 @@
                         <input hidden="hidden" name="idUsuario" value="@ViewBag.usuarioEdit.idUsuario">
                         <div class="col-lg-4 col-md-12 col-sm-12">
                             <label for="txtNombre" class="form-label">Nombre</label>
-                            <input type="text" value="@ViewBag.usuarioEdit.nombre" class="form-control form-control-sm mb-2"
-                                name="txtNombre" required />
+                            <input type="text" value="@ViewBag.usuarioEdit.nombre"
+                                class="form-control form-control-sm mb-2" name="txtNombre" required />
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <label for="txtPApellido" class="form-label">Primer Apellido</label>
@@ -49,13 +49,13 @@
                     <div class="row">
                         <div class="col-lg-5 col-md-4 col-sm-12">
                             <label for="txtCedula" class="form-label">Cédula</label>
-                            <input type="text" value="@ViewBag.usuarioEdit.cedula" class="form-control form-control-sm mb-2"
-                                name="txtCedula" required />
+                            <input type="text" value="@ViewBag.usuarioEdit.cedula"
+                                class="form-control form-control-sm mb-2" name="txtCedula" required />
                         </div>
                         <div class="col-lg-7 col-md-8 col-sm-12">
                             <label for="txtEmail" class="form-label">Correo Electrónico</label>
-                            <input type="email" value="@ViewBag.usuarioEdit.email" class="form-control form-control-sm mb-2"
-                                name="txtEmail" required />
+                            <input type="email" value="@ViewBag.usuarioEdit.email"
+                                class="form-control form-control-sm mb-2" name="txtEmail" required />
                         </div>
                     </div>
                     <div class="row">
@@ -82,7 +82,7 @@
                                             {
                                                 isSelected = true;
                                             }
-                                            <option value="@roles.idRolUsuario" selected="@isSelected">@roles.nombreRol</option> 
+                                            <option value="@roles.idRolUsuario" selected="@isSelected">@roles.nombreRol</option>
                                         }
                                     </select>
                                 }
@@ -93,9 +93,9 @@
                     <div class="form-group float-end">
                         <div class="col-12">
                             <button class="btn btn-secondary"
-                        onclick="window.location='@Url.Action("Index", "Usuarios")'">
-                            Cancelar
-                        </button>
+                                onclick="window.location='@Url.Action("Index", "Usuarios")'">
+                                Cancelar
+                            </button>
                             <button class="btn btn-success" type="submit">Guardar</button>
                         </div>
                     </div>
